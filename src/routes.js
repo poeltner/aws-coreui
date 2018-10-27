@@ -182,6 +182,11 @@ const User = Loadable({
   loading: Loading,
 });
 
+const I18n = Loadable({
+  loader: () => import('./views/I18n/I18n'),
+  loading: Loading,
+});
+
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -227,6 +232,7 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/i18n', exact: true,  name: 'I18n', component: I18n },
 ];
 
 export default routes;

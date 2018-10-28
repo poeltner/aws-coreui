@@ -30,6 +30,19 @@ export default {
     },
     {
       title: true,
+      name: 'New',
+      wrapper: {
+        element: '',
+        attributes: {},
+      },
+    },
+    {
+      name: 'I18n',
+      url: '/i18n',
+      icon: 'icon-star',
+    },
+    {
+      title: true,
       name: 'Components',
       wrapper: {
         element: '',

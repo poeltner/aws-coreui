@@ -33,8 +33,12 @@ class App extends Component {
   }
 }
 
+const federated = {
+  facebook_app_id: '',
+};
+
 export default withAuthenticator(App, false, [
-  <DefaultSignIn/>,
+  <DefaultSignIn federated={federated} />,
   <DefaultConfirmSignIn/>,
   <VerifyContact/>,
   <DefaultSignUp/>,

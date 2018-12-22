@@ -4,6 +4,15 @@ import { ForgotPassword  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 
 class DefaultForgotPassword  extends ForgotPassword  {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      inputs: {}
+    }
+
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
   error(err) {
     console.log("My Error " +  JSON.stringify(err))

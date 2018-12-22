@@ -1,9 +1,43 @@
 import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { SignIn, FederatedButtons } from 'aws-amplify-react';
+import { Auth } from 'aws-amplify';
 import NotificationAlert from 'react-notification-alert';
 
 class DefaultSignIn extends SignIn {
+
+  onClickMetaMask() {
+    console.log("test");
+    let id_token ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFzZGZhc2RmYTlzZGpmMGFkamYwOWFkc2pmIn0.eyJuYW1lIjoiSmFuZSBEb2UiLCJnaXZlbl9uYW1lIjoiSmFuZSIsImZhbWlseV9uYW1lIjoiRG9lIiwiZ2VuZGVyIjoiZmVtYWxlIiwiYmlydGhkYXRlIjoiMDAwMC0xMC0zMSIsImVtYWlsIjoiamFuZWRvZUBleGFtcGxlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsInBpY3R1cmUiOiJodHRwOi8vZXhhbXBsZS5jb20vamFuZWRvZS9tZS5qcGciLCJub25jZSI6ImNyeXB0by12YWx1ZSIsInBob25lIjoiYXNkZmFkZiIsImlhdCI6MTU0MTExMjI1MywiZXhwIjoxNTQxMTU1NDUzLCJhdWQiOiJhc2QiLCJpc3MiOiJodHRwczovL21hZWU1czRvaDguZXhlY3V0ZS1hcGkuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb20vZGV2Iiwic3ViIjoiMjQ4Mjg5NzYxMDAxIiwianRpIjoiMzZiNDg4ZjItMDhiZi00MWYwLThlYmQtMDE4YzAwYzE2ZmE4In0.Ma6cey97Jr5foe-WeIhsivALjTF3SvX7-DXdyeTB9B49DQtZqAzjS8Jala8nDe7pWbybKx020YAe942WsaZ8BGMLf_HlTUwYFIP048gtslkwgrkHOFnE5M6XR6OxOt4Tpo6-NN-0tR--zIZyOmb0n_cLQM0PSsISqjqqcrI0f2c";
+    let expires_at = '1541149446'
+    Auth.federatedSignIn(
+      // Initiate federated sign-in with Google identity provider 
+      'maee5s4oh8.execute-api.eu-central-1.amazonaws.com/dev',
+      {
+          // identity_id: '248289761001',
+          // the JWT token
+          token: id_token, 
+          // the expiration time
+          // expires_at 
+      },
+      // // a user object
+      // user
+      {
+        // "name": "Jane Doe",
+        // "given_name": "Jane",
+        // "family_name": "Doe",
+        // "gender": "female",
+        // "birthdate": "0000-10-31",
+        // "email": "janedoe@example.com",
+        // "picture": "http://example.com/janedoe/me.jpg",
+        // "nonce": "asdfadsf"
+      }
+  ).then(credentials => {
+    console.log('get aws credentials', credentials);
+  }).catch(e => {
+    console.log(e);
+  });
+  }
 
   error(err) {
     console.log("My Error " +  JSON.stringify(err))

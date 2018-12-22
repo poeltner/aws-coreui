@@ -26,7 +26,6 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
 
   render() {
     const { authState } = this.props;
-    console.log("authState" + authState);
     if (authState !== 'confirmSignIn') {
       return null;
     }

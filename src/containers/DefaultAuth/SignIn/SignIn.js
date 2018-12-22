@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-import { SignIn, FederatedButtons } from 'aws-amplify-react';
+import { SignIn } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { SignInSocialButtons } from '../SocialButtons/SignInSocialButtons';
 
 class DefaultSignIn extends SignIn {
-
   error(err) {
     console.log("My Error " +  JSON.stringify(err))
     const options = {
@@ -28,8 +28,7 @@ class DefaultSignIn extends SignIn {
     if ((authState !== 'signIn') && (authState !== 'signedUp') && (authState !== 'signedOut')) {
       return null;
     }
-    // if (hide && hide.includes(SignIn)) { return null; }
-
+  
     return (
       <div className="app flex-row align-items-center">
         <NotificationAlert ref="notify" />
@@ -42,11 +41,6 @@ class DefaultSignIn extends SignIn {
                     <Form>
                       <h1>Login</h1>
                       <p className="text-muted">Sign In to your account</p>
-                      <FederatedButtons
-                        federated={federated}
-                        authState={authState}
-                        onStateChange={onStateChange}
-                      />
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -83,6 +77,11 @@ class DefaultSignIn extends SignIn {
                         </Col>
                       </Row>
                     </Form>
+                    <SignInSocialButtons
+                        onStateChange={onStateChange}
+                        federated={federated}
+                        authState={authState}
+                      />
                   </CardBody>
                 </Card>
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
@@ -91,7 +90,7 @@ class DefaultSignIn extends SignIn {
                       <h2>Sign up</h2>
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register!</Button>
                     </div>
                   </CardBody>
                 </Card>

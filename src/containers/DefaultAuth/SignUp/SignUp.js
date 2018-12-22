@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { SignUp } from 'aws-amplify-react';
+import { JS } from '@aws-amplify/core';
 import NotificationAlert from 'react-notification-alert';
+import { SignUpSocialButtons } from '../SocialButtons/SignUpSocialButtons';
 
 class DefaultSignUp extends SignUp {
   constructor(props) {
@@ -39,7 +41,7 @@ class DefaultSignUp extends SignUp {
 
   render() {
 
-    const { authState } = this.props;
+    const { authState, federated, onStateChange } = this.props;
     if (authState !== 'signUp') {
       return null;
     }
@@ -111,16 +113,17 @@ class DefaultSignUp extends SignUp {
                     </Row>
                   </Form>
                 </CardBody>
-                <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
-                </CardFooter>
+                { (!JS.isEmpty(federated))?
+                  <CardFooter className="p-4">
+                    <SignUpSocialButtons
+                      onStateChange={onStateChange}
+                      federated={federated}
+                      authState={authState}
+                    />
+                  </CardFooter>
+                  :
+                  null
+                }
               </Card>
             </Col>
           </Row>

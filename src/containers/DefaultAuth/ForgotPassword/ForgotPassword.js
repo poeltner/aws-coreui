@@ -2,17 +2,25 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { ForgotPassword  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { withNamespaces } from 'react-i18next';
 
 class DefaultForgotPassword  extends ForgotPassword  {
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
   error(err) {
-    console.log("My Error " +  JSON.stringify(err))
+    const { t } = this.props;
     const options = {
       place: 'tl',
       message: (
           <div>
               <div>
-                  {err.message}
+                  { (err.message)?
+                      t(err.message):
+                      t(err) 
+                  }
               </div>
           </div> 
       ),
@@ -24,16 +32,18 @@ class DefaultForgotPassword  extends ForgotPassword  {
   }
 
   onSubmit() {
+    const { t } = this.props;
     if (this.inputs.password === this.inputs.repeatpassword) {
       this.inputs.email = this.inputs.username;
       this.submit();
     } else {
       console.log("Passwords do not match");
-      this.error({message:"Passwords do not match"});
+      this.error({message:t('Passwords do not match')});
     }
   }
 
   sendView() {
+    const { t } = this.props;
       return (
         <InputGroup className="mb-3">
           <InputGroupAddon addonType="prepend">
@@ -43,7 +53,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
           </InputGroupAddon>
           <Input  
               autoFocus
-              placeholder="Email"
+              placeholder={ t('common:Email') }
               key="username"
               name="username"
               onChange={this.handleInputChange} />
@@ -52,6 +62,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
   }
 
   submitView() {
+    const { t } = this.props;
       return (
           <div>
               <InputGroup className="mb-3">
@@ -62,7 +73,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
                 </InputGroupAddon>
                 <Input  
                     autoFocus
-                    placeholder="Code"
+                    placeholder={ t('Code') }
                     key="code"
                     name="code"
                     autoComplete="off"
@@ -77,7 +88,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
                   </InputGroupText>
                 </InputGroupAddon>
                 <Input 
-                    placeholder="Password"
+                    placeholder={ t('common:Password') }
                     key="password"
                     type="password"
                     name="password"
@@ -90,7 +101,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
                   </InputGroupText>
                 </InputGroupAddon>
                 <Input 
-                    placeholder="Repeat Password"
+                    placeholder={ t('common:RepeatPassword') }
                     key="repeatpassword"
                     type="password"
                     name="repeatpassword"
@@ -102,6 +113,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
 
 
   render() {
+    const { t } = this.props;
     const { authState } = this.props;
     if (authState !== 'forgotPassword') {
       return null;
@@ -118,17 +130,17 @@ class DefaultForgotPassword  extends ForgotPassword  {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Forgot Password</h1>
-                      <p className="text-muted">Reset your password</p>
+                      <h1>{ t('Forgot Password') }</h1>
+                      <p className="text-muted">{ t('Reset your password') }</p>
                       { this.state.delivery? this.submitView() : this.sendView() }
                       <Row>
                         <Col xs="6">
-                          <Button color="link" className="px-0" onClick={() => {this.setState({delivery:false}); this.changeState('signIn')}}>Back to Sign in</Button>
+                          <Button color="link" className="px-0" onClick={() => {this.setState({delivery:false}); this.changeState('signIn')}}>{ t('Back to Sign in') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
                           { this.state.delivery ? 
-                              <Button color="primary" className="px-4" onClick={this.onSubmit}>Submit</Button> :
-                              <Button color="primary" className="px-4" onClick={this.send}>Send Code</Button>
+                              <Button color="primary" className="px-4" onClick={this.onSubmit}>{ t('common:Submit') }</Button> :
+                              <Button color="primary" className="px-4" onClick={this.send}>{ t('Send Code') }</Button>
                           }  
                         </Col>
                       </Row>
@@ -138,10 +150,9 @@ class DefaultForgotPassword  extends ForgotPassword  {
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <h2>Forgot Password</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <h2>{ t('Forgot Password') }</h2>
+                      <p>{ t('Forgot Password Text') }</p>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>{ t('Register Now!') }</Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -154,4 +165,4 @@ class DefaultForgotPassword  extends ForgotPassword  {
   }
 }
 
-export default DefaultForgotPassword;
+export default withNamespaces('auth') (DefaultForgotPassword);

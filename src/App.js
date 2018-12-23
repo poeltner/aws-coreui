@@ -18,6 +18,7 @@ import { Login, Page404, Page500, Register } from './views/Pages';
 Amplify.configure(aws_exports);
 
 class App extends Component {
+  
   render() {
     return (
       <HashRouter>
@@ -33,12 +34,16 @@ class App extends Component {
   }
 }
 
+const federated = {
+  facebook_app_id: '1112955052195883',
+};
+
 export default withAuthenticator(App, false, [
-  <DefaultSignIn/>,
+  <DefaultSignIn federated={federated}/>,
   <DefaultConfirmSignIn/>,
   <VerifyContact/>,
-  <DefaultSignUp/>,
+  <DefaultSignUp federated={federated}/>,
   <DefaultConfirmSignUp/>,
   <DefaultForgotPassword/>,
   <DefaultRequireNewPassword/>
-]);
+], federated);

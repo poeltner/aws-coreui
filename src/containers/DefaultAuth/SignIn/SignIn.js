@@ -1,18 +1,28 @@
 import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-import { SignIn, FederatedButtons } from 'aws-amplify-react';
+import { SignIn } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { SignInSocialButtons } from '../SocialButtons/SignInSocialButtons';
+import { withNamespaces } from 'react-i18next';
 
 class DefaultSignIn extends SignIn {
+  constructor(props) {
+    super(props);
+
+    this.onSignIn = this.onSignIn.bind(this);
+  }
 
   error(err) {
-    console.log("My Error " +  JSON.stringify(err))
+    const { t } = this.props;
     const options = {
       place: 'tl',
       message: (
           <div>
               <div>
-                  {err.message}
+                  { (err.message)?
+                      t(err.message):
+                      t(err) 
+                  }
               </div>
           </div> 
       ),
@@ -22,14 +32,24 @@ class DefaultSignIn extends SignIn {
     };
     this.refs.notify.notificationAlert(options);
   }
+
+  onSignIn() {
+    if (!this.inputs.username) {
+      this.error("Username cannot be empty");
+    } else if (!this.inputs.password) {
+      this.error("Password cannot be empty");
+    } else {
+      this.signIn();
+    }
+  }
   
   render() {
+    const { t } = this.props;
     const { authState, federated, onStateChange } = this.props;
     if ((authState !== 'signIn') && (authState !== 'signedUp') && (authState !== 'signedOut')) {
       return null;
     }
-    // if (hide && hide.includes(SignIn)) { return null; }
-
+  
     return (
       <div className="app flex-row align-items-center">
         <NotificationAlert ref="notify" />
@@ -40,13 +60,8 @@ class DefaultSignIn extends SignIn {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Login</h1>
-                      <p className="text-muted">Sign In to your account</p>
-                      <FederatedButtons
-                        federated={federated}
-                        authState={authState}
-                        onStateChange={onStateChange}
-                      />
+                      <h1>{ t('common:Login') }</h1>
+                      <p className="text-muted">{ t('Sign In to your account') }</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -55,7 +70,7 @@ class DefaultSignIn extends SignIn {
                         </InputGroupAddon>
                         <Input  
                             autoFocus
-                            placeholder="Email"
+                            placeholder={ t('common:Email') }
                             key="username"
                             name="username"
                             onChange={this.handleInputChange} />
@@ -67,7 +82,7 @@ class DefaultSignIn extends SignIn {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input 
-                            placeholder="Password"
+                            placeholder={ t('common:Password') }
                             key="password"
                             type="password"
                             name="password"
@@ -75,23 +90,27 @@ class DefaultSignIn extends SignIn {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="link" className="px-0" onClick={() => this.changeState('forgotPassword')}>Forgot password?</Button>
+                          <Button color="link" className="px-0" onClick={() => this.changeState('forgotPassword')}>{ t('Forgot password?') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="primary" className="px-4" onClick={this.signIn}>Login</Button>
+                          <Button color="primary" className="px-4" onClick={this.onSignIn}>{ t('common:Login') }</Button>
                           
                         </Col>
                       </Row>
                     </Form>
+                    <SignInSocialButtons
+                        onStateChange={onStateChange}
+                        federated={federated}
+                        authState={authState}
+                      />
                   </CardBody>
                 </Card>
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <h2>Sign up</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <h2>{ t('Sign Up') }</h2>
+                      <p>{ t('Sign Up Text') }</p>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>{ t('Register!') }</Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -104,4 +123,5 @@ class DefaultSignIn extends SignIn {
   }
 }
 
-export default DefaultSignIn;
+// export default DefaultSignIn;
+export default withNamespaces('auth') (DefaultSignIn);

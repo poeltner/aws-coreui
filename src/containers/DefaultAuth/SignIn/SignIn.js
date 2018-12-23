@@ -3,13 +3,14 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import { SignIn, FederatedButtons } from 'aws-amplify-react';
 import { Auth } from 'aws-amplify';
 import NotificationAlert from 'react-notification-alert';
+import { MetamaskButton } from '../SocialButtons/MetamaskButton';
 
 class DefaultSignIn extends SignIn {
 
   onClickMetaMask() {
     console.log("test");
-    let id_token ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFzZGZhc2RmYTlzZGpmMGFkamYwOWFkc2pmIn0.eyJuYW1lIjoiSmFuZSBEb2UiLCJnaXZlbl9uYW1lIjoiSmFuZSIsImZhbWlseV9uYW1lIjoiRG9lIiwiZ2VuZGVyIjoiZmVtYWxlIiwiYmlydGhkYXRlIjoiMDAwMC0xMC0zMSIsImVtYWlsIjoiamFuZWRvZUBleGFtcGxlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsInBpY3R1cmUiOiJodHRwOi8vZXhhbXBsZS5jb20vamFuZWRvZS9tZS5qcGciLCJub25jZSI6ImNyeXB0by12YWx1ZSIsInBob25lIjoiYXNkZmFkZiIsImlhdCI6MTU0MTExMjI1MywiZXhwIjoxNTQxMTU1NDUzLCJhdWQiOiJhc2QiLCJpc3MiOiJodHRwczovL21hZWU1czRvaDguZXhlY3V0ZS1hcGkuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb20vZGV2Iiwic3ViIjoiMjQ4Mjg5NzYxMDAxIiwianRpIjoiMzZiNDg4ZjItMDhiZi00MWYwLThlYmQtMDE4YzAwYzE2ZmE4In0.Ma6cey97Jr5foe-WeIhsivALjTF3SvX7-DXdyeTB9B49DQtZqAzjS8Jala8nDe7pWbybKx020YAe942WsaZ8BGMLf_HlTUwYFIP048gtslkwgrkHOFnE5M6XR6OxOt4Tpo6-NN-0tR--zIZyOmb0n_cLQM0PSsISqjqqcrI0f2c";
-    let expires_at = '1541149446'
+    let id_token ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFzZGZhc2RmYTlzZGpmMGFkamYwOWFkc2pmIn0.eyJuYW1lIjoiSmFuZSBEb2UiLCJlbWFpbCI6ImphbmVkb2VAZXhhbXBsZS5jb20iLCJlbWFpbF92ZXJpZmllZCI6InRydWUiLCJhenAiOiJmOWEwZDlqZjA5YWpkZjBhc2RqZiIsInNjb3BlIjoib3BlbmlkIiwiaWF0IjoxNTQ1NTU5NDEyLCJleHAiOjE1NDU4MTg2MTIsImF1ZCI6ImY5YTBkOWpmMDlhamRmMGFzZGpmIiwiaXNzIjoiaHR0cHM6Ly9tYWVlNXM0b2g4LmV4ZWN1dGUtYXBpLmV1LWNlbnRyYWwtMS5hbWF6b25hd3MuY29tL2RldiIsInN1YiI6IjI0ODI4OTc2MTAwMSJ9.TpJyhCXkIEzQJxkzVtmI5pUB46ZXiec8LrJMjiv96MVV305clLhT7EcrsAcGaqktegHc1xyj-TN-RKjsz8V5WtIXZ2vBbIjc4yD_wxoR861mUcRcS7_K55Xau5-2xepJCNiGOMzY_gqQm_6afdDr9Cy335ZdmzBbXaLYI62bzQkPhq7wNpV9yaL-sMxCAM5SvIE7CqOcTzs8-sOedYKUYX89cQQUwUm6-sxmx3W4CxxUH1Ue5DaLMMs9A_L7o18xQRmPOhExtaQhR0HQmjVZm2U6lozx6L_gBM0ZzydImhwVfyy3sfz8S7SdVNM6EV5rOn5R3WqzErS3aILtzi23aA";
+    let expires_at = '1545817380'
     Auth.federatedSignIn(
       // Initiate federated sign-in with Google identity provider 
       'maee5s4oh8.execute-api.eu-central-1.amazonaws.com/dev',
@@ -18,20 +19,10 @@ class DefaultSignIn extends SignIn {
           // the JWT token
           token: id_token, 
           // the expiration time
-          // expires_at 
+          expires_at 
       },
-      // // a user object
-      // user
-      {
-        // "name": "Jane Doe",
-        // "given_name": "Jane",
-        // "family_name": "Doe",
-        // "gender": "female",
-        // "birthdate": "0000-10-31",
-        // "email": "janedoe@example.com",
-        // "picture": "http://example.com/janedoe/me.jpg",
-        // "nonce": "asdfadsf"
-      }
+      '248289761001'
+      
   ).then(credentials => {
     console.log('get aws credentials', credentials);
   }).catch(e => {
@@ -74,8 +65,13 @@ class DefaultSignIn extends SignIn {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Login</h1>
+                      <h1>Login</h1> 
                       <p className="text-muted">Sign In to your account</p>
+                      <Button onClick={this.onClickMetaMask}>MetaMask</Button>
+                      <MetamaskButton 
+                        onStateChange={onStateChange}
+                        serverUrl="http://localhost:4000"
+                      ></MetamaskButton>
                       <FederatedButtons
                         federated={federated}
                         authState={authState}

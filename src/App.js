@@ -16,6 +16,7 @@ import { Login, Page404, Page500, Register } from './views/Pages';
 // import { renderRoutes } from 'react-router-config';
 
 Amplify.configure(aws_exports);
+Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
 class App extends Component {
   render() {

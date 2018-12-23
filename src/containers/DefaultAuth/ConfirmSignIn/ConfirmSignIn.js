@@ -2,18 +2,23 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { ConfirmSignIn  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { withNamespaces } from 'react-i18next';
 
 class DefaultConfirmSignIn  extends ConfirmSignIn  {
 
 
   error(err) {
+    const { t } = this.props;
     console.log("My Error " +  JSON.stringify(err))
     const options = {
       place: 'tl',
       message: (
           <div>
               <div>
-                  {err.message}
+                  { (err.message)?
+                      t(err.message):
+                      t(err) 
+                  }
               </div>
           </div> 
       ),
@@ -25,6 +30,7 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
   }
 
   render() {
+    const { t } = this.props;
     const { authState } = this.props;
     if (authState !== 'confirmSignIn') {
       return null;
@@ -40,8 +46,8 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Confirm {this.state.mfaType} Code</h1>
-                      <p className="text-muted">Please enter the code</p>
+                      <h1>{ t('common:Confirm') } {this.state.mfaType} { t('Code') }</h1>
+                      <p className="text-muted">{ t('Please enter the code') }</p>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -50,7 +56,7 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
                         </InputGroupAddon>
                         <Input 
                             autoFocus
-                            placeholder="Code"
+                            placeholder={ t('Code') }
                             key="code"
                             name="code"
                             autoComplete="off"
@@ -60,10 +66,10 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="link" className="px-0"  onClick={() => this.changeState('signIn')}>Back to Sign In</Button>
+                          <Button color="link" className="px-0"  onClick={() => this.changeState('signIn')}>{ t('Back to Sign In') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="primary" className="px-4" onClick={this.confirm}>Confirm</Button>
+                          <Button color="primary" className="px-4" onClick={this.confirm}>{ t('common:Confirm') }</Button>
                         </Col>
                       </Row>
                     </Form>
@@ -72,10 +78,9 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <h2>Confirm Sign In</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <h2>{ t('Confirm Sign In') }</h2>
+                      <p>{ t('Confirm Sign In Text') }</p>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>{ t('Register Now!') }</Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -88,4 +93,4 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
   }
 }
 
-export default DefaultConfirmSignIn;
+export default withNamespaces('auth') (DefaultConfirmSignIn);

@@ -1,3 +1,10 @@
 {
-    
+    "Register": "Register",
+    "Login":"Login",
+    "Email":"Email",
+    "Password":"Password",
+    "RepeadPassword":"Repeat Password",
+    "Submit": "Submit",
+    "Confirm": "Confirm",
+    "Change":"Change"
 }

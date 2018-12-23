@@ -2,17 +2,22 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { ConfirmSignUp  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { withNamespaces } from 'react-i18next';
 
 class DefaultConfirmSignUp  extends ConfirmSignUp  {
 
   error(err) {
+    const { t } = this.props;
     console.log("My Error " +  JSON.stringify(err))
     const options = {
       place: 'tl',
       message: (
           <div>
               <div>
-                  {err.message}
+                  { (err.message)?
+                      t(err.message):
+                      t(err) 
+                  }
               </div>
           </div> 
       ),
@@ -24,6 +29,7 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
   }
 
   render() {
+    const { t } = this.props;
     const { authState } = this.props;
     if (authState !== 'confirmSignUp') {
       return null;
@@ -39,8 +45,8 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Confirm Sign Up</h1>
-                      <p className="text-muted">Please enter the code</p>
+                      <h1>{ t('Confirm Sign Up') }</h1>
+                      <p className="text-muted">{ t('Please enter the code') }</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -48,7 +54,7 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input  
-                          placeholder='Email'
+                          placeholder={ t('common:Email') }
                           key="username"
                           name="username"
                           onChange={this.handleInputChange}
@@ -64,21 +70,21 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                         </InputGroupAddon>
                         <Input 
                             autoFocus
-                            placeholder='Enter your code'
+                            placeholder={ t('Code') }
                             key="code"
                             name="code"
                             autoComplete="off"
                             onChange={this.handleInputChange}
                         />
-                        <InputGroupAddon addonType="append"><Button color="primary" className="px-0" onClick={this.resend}>Resend Code</Button></InputGroupAddon>
+                        <InputGroupAddon addonType="append"><Button color="primary" className="px-0" onClick={this.resend}>{ t('Resend Code') }</Button></InputGroupAddon>
                         
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="link" className="px-0"  onClick={() => this.changeState('signIn')}>Back to Sign In</Button>
+                          <Button color="link" className="px-0"  onClick={() => this.changeState('signIn')}>{ t('Back to Sign In') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="primary" className="px-4" onClick={this.confirm}>Confirm</Button>
+                          <Button color="primary" className="px-4" onClick={this.confirm}>{ t('common:Confirm') }</Button>
                         </Col>
                       </Row>
                     </Form>
@@ -87,10 +93,9 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <h2>Confirm Sign Up</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <h2>{ t('Confirm Sign Up') }</h2>
+                      <p>{ t('Confirm Sign Up Text') }</p>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>{ t('Register Now!') }</Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -103,4 +108,4 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
   }
 }
 
-export default DefaultConfirmSignUp;
+export default withNamespaces('auth') (DefaultConfirmSignUp);

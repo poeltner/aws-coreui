@@ -2,17 +2,22 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { RequireNewPassword  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
+import { withNamespaces } from 'react-i18next';
 
 class DefaultRequireNewPassword   extends RequireNewPassword   {
 
   error(err) {
+    const { t } = this.props;
     console.log("My Error " +  JSON.stringify(err))
     const options = {
       place: 'tl',
       message: (
           <div>
               <div>
-                  {err.message}
+                  { (err.message)?
+                      t(err.message):
+                      t(err) 
+                  }
               </div>
           </div> 
       ),
@@ -24,6 +29,7 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
   }
 
   render() {
+    const { t } = this.props;
     const { authState } = this.props;
     if (authState !== 'requireNewPassword') {
       return null;
@@ -42,8 +48,8 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
                 <Card className="p-4">
                   <CardBody>
                     <Form>
-                      <h1>Change Password</h1>
-                      <p className="text-muted">Password change required</p>
+                      <h1>{ t('Change Password') }</h1>
+                      <p className="text-muted">{ t('Password change required') }</p>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -51,7 +57,7 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input 
-                            placeholder="Password"
+                            placeholder={ t('Password') }
                             key="password"
                             type="password"
                             name="password"
@@ -70,12 +76,12 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
                       <Row>
                         <Col xs="6">
                           
-                          <Button color="link" className="px-0" onClick={() => this.changeState('signIn')}>Back to Sign in</Button>
+                          <Button color="link" className="px-0" onClick={() => this.changeState('signIn')}>{ t('Back to Sign in') }</Button>
                           
                           
                         </Col>
                         <Col xs="6" className="text-right">
-                              <Button color="primary" className="px-4" onClick={this.change}>Change</Button> 
+                              <Button color="primary" className="px-4" onClick={this.change}>{ t('common:Change') }</Button> 
                         </Col>
                       </Row>
                     </Form>
@@ -84,10 +90,9 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <h2>Require new Password</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>Register Now!</Button>
+                      <h2>{ t('Require new Password') }</h2>
+                      <p>{ t('Require new Password Text') }</p>
+                      <Button color="primary" className="mt-3" active onClick={() => this.changeState('signUp')}>{ t('Register Now!') }</Button>
                     </div>
                   </CardBody>
                 </Card>
@@ -100,4 +105,4 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
   }
 }
 
-export default DefaultRequireNewPassword;
+export default withNamespaces('auth') (DefaultRequireNewPassword);

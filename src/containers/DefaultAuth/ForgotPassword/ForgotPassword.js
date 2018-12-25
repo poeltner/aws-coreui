@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import { ForgotPassword  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultForgotPassword  extends ForgotPassword  {
   constructor(props) {
@@ -12,6 +13,7 @@ class DefaultForgotPassword  extends ForgotPassword  {
 
   error(err) {
     const { t } = this.props;
+    Log.error(err, 'DefaultAuth.ForgotPassword');
     const options = {
       place: 'tl',
       message: (

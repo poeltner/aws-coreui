@@ -5,6 +5,7 @@ import { JS } from '@aws-amplify/core';
 import NotificationAlert from 'react-notification-alert';
 import { SignUpSocialButtons } from '../SocialButtons/SignUpSocialButtons';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultSignUp extends SignUp {
   constructor(props) {
@@ -14,7 +15,7 @@ class DefaultSignUp extends SignUp {
 
   error(err) {
     const { t } = this.props;
-    console.log("My Error " +  JSON.stringify(err))
+    Log.error(err, 'DefaultAuth.SignUp');
     const options = {
       place: 'tl',
       message: (

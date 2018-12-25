@@ -4,6 +4,7 @@ import { SignIn } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 import { SignInSocialButtons } from '../SocialButtons/SignInSocialButtons';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultSignIn extends SignIn {
   constructor(props) {
@@ -14,6 +15,7 @@ class DefaultSignIn extends SignIn {
 
   error(err) {
     const { t } = this.props;
+    Log.error(err, 'DefaultAuth.SignIn');
     const options = {
       place: 'tl',
       message: (

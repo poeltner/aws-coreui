@@ -3,12 +3,13 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import { RequireNewPassword  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultRequireNewPassword   extends RequireNewPassword   {
 
   error(err) {
     const { t } = this.props;
-    console.log("My Error " +  JSON.stringify(err))
+    Log.error(err, 'DefaultAuth.RequireNewPassword');
     const options = {
       place: 'tl',
       message: (

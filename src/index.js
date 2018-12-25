@@ -8,6 +8,14 @@ import i18n from './i18n'; // initialized i18next instance
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Log from './utils/Logger/Log';
+
+// Add these lines:
+if (process.env.NODE_ENV !== 'production') {
+    localStorage.setItem('debug', process.env.REACT_APP_APP_NAME+':*');
+}
+
+Log.info('env variables: ' + JSON.stringify(process.env),'index.js')
 
 ReactDOM.render(
     <I18nextProvider i18n={ i18n }>

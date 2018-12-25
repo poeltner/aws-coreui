@@ -21,12 +21,20 @@ class DefaultHeader extends Component {
     this.state = {
       showLanguageSwitcher: false
     }
+
+    this.toggleLanguageSwitcher = this.toggleLanguageSwitcher.bind(this);
   }
 
   onClickLogout() {
     Auth.signOut()
     .then(window.location.reload())
     .catch(err => console.log(err));
+  }
+
+  toggleLanguageSwitcher() {
+    this.setState({
+      showLanguageSwitcher: !this.state.showLanguageSwitcher
+    })
   }
 
   render() {
@@ -36,7 +44,7 @@ class DefaultHeader extends Component {
 
     return (
       <React.Fragment>
-        <DefaultLanguageSwitcher showModal={this.state.showLanguageSwitcher} />
+        <DefaultLanguageSwitcher showModal={this.state.showLanguageSwitcher} toggle={this.toggleLanguageSwitcher}/>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
           full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}

@@ -11,20 +11,20 @@ class DefaultLanguageSwitcher extends React.Component {
       modal: false
     };
 
-    this.toggle = this.toggle.bind(this);
+    // this.toggle = this.toggle.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-      this.setState({
-          modal: nextProps.showModal
-      });
-  }
+//   componentWillReceiveProps(nextProps) {
+//       this.setState({
+//           modal: nextProps.showModal
+//       });
+//   }
 
-  toggle() {
-    this.setState({
-      modal: !this.state.modal
-    });
-  }
+//   toggle() {
+//     this.setState({
+//       modal: !this.state.modal
+//     });
+//   }
 
   render() {
 
@@ -34,14 +34,14 @@ class DefaultLanguageSwitcher extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+        <Modal isOpen={this.props.showModal} toggle={this.props.toggle} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
             Change language: <Button color="link" onClick={() => changeLanguage('de')}>de</Button> | <Button color="link" onClick={() => changeLanguage('en')}>en</Button>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            <Button color="primary" onClick={this.props.toggle}>Do Something</Button>{' '}
+            <Button color="secondary" onClick={this.props.toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>

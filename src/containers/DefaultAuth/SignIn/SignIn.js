@@ -4,16 +4,17 @@ import { SignIn } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 import { SignInSocialButtons } from '../SocialButtons/SignInSocialButtons';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultSignIn extends SignIn {
   constructor(props) {
     super(props);
-
     this.onSignIn = this.onSignIn.bind(this);
   }
 
   error(err) {
     const { t } = this.props;
+    Log.error(JSON.stringify(err,2,2), 'DefaultAuth.SignIn');
     const options = {
       place: 'tl',
       message: (

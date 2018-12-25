@@ -17,6 +17,11 @@ import { Login, Page404, Page500, Register } from './views/Pages';
 
 Amplify.configure(aws_exports);
 
+if (process.env.NODE_ENV !== 'production') {
+  console.log("process.env.REACT_APP_APP_NAME app.js " + process.env.REACT_APP_APP_NAME)
+  localStorage.setItem('debug', process.env.REACT_APP_APP_NAME+':*');
+}
+
 class App extends Component {
   
   render() {
@@ -34,16 +39,13 @@ class App extends Component {
   }
 }
 
-const federated = {
-  facebook_app_id: '1112955052195883',
-};
 
 export default withAuthenticator(App, false, [
-  <DefaultSignIn federated={federated}/>,
+  <DefaultSignIn federated={aws_exports.federated}/>,
   <DefaultConfirmSignIn/>,
   <VerifyContact/>,
-  <DefaultSignUp federated={federated}/>,
+  <DefaultSignUp federated={aws_exports.federated}/>,
   <DefaultConfirmSignUp/>,
   <DefaultForgotPassword/>,
   <DefaultRequireNewPassword/>
-], federated);
+]);

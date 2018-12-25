@@ -3,12 +3,13 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import { ConfirmSignUp  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
 import { withNamespaces } from 'react-i18next';
+import Log from '../../../utils/Logger/Log';
 
 class DefaultConfirmSignUp  extends ConfirmSignUp  {
 
   error(err) {
     const { t } = this.props;
-    console.log("My Error " +  JSON.stringify(err))
+    Log.error(err, 'DefaultAuth.ConfirmSignUp');
     const options = {
       place: 'tl',
       message: (

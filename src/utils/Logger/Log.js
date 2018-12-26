@@ -1,5 +1,5 @@
 import debug from 'debug';
-
+ 
 const BASE = process.env.REACT_APP_APP_NAME;
 const COLOURS = {
   trace: process.env.REACT_APP_LOG_COLOURS_TRACE,

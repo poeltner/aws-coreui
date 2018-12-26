@@ -1,1 +1,28 @@
 // Here you can add other styles
+
+.mobileTitle {
+    // position: fixed;
+    z-index: $zindex-sticky;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px 10px 15px;
+    
+
+    @if $navbar-brand-bg == transparent {
+        background-color: $navbar-bg;
+    } @else {
+        background-color: $navbar-brand-bg;
+    }
+
+    @include border-radius($breadcrumb-border-radius);
+    @include borders($breadcrumb-borders);
+    
+}
+
+@include media-breakpoint-up(lg) {
+    .mobileTitle {
+        display: none;
+    }
+  
+}

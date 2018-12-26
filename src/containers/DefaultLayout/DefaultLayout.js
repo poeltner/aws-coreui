@@ -20,6 +20,7 @@ import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
 import { Auth } from 'aws-amplify';
+import DefaultMobileTitle from './DefaultMobileTitle';
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -55,6 +56,7 @@ class DefaultLayout extends Component {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
+            <DefaultMobileTitle />
             <AppBreadcrumb appRoutes={routes}/>
             <Container fluid>
               <Suspense fallback={this.loading()}>

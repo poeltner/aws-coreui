@@ -1,3 +1,5 @@
+const tenant = localStorage.getItem('tenant');
+
 export default {
   items: [
     {
@@ -40,6 +42,11 @@ export default {
       name: 'I18n',
       url: '/i18n',
       icon: 'icon-star',
+    },
+    {
+      name: 'Tenants',
+      url: '/'+tenant+'/tenants',
+      icon: 'icon-puzzle'
     },
     {
       title: true,

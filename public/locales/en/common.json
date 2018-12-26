@@ -9,5 +9,8 @@
     "Confirm": "Confirm",
     "Change":"Change",
     "Settings":"Settings",
-    "Tenant":"Tenant"
+    "Tenant":"Tenant",
+    "Cancel": "Cancel",
+    "Switch": "Switch",
+    "PleaseSelect": "Please Select"
 }

@@ -1,0 +1,6 @@
+{
+  "name": "tenants",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./tenants.detail.js"
+}

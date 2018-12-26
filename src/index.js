@@ -16,8 +16,10 @@ if (process.env.NODE_ENV !== 'production') {
     Log.info('env variables: ' + JSON.stringify(process.env),'index.js')
 }
 
-localStorage.setItem('tenant', 'musterFirma');
-localStorage.setItem('tenantName', 'Muster Firma');
+if (localStorage.getItem('tenant') == null) {
+    localStorage.setItem('tenant', 'musterFirma');
+    localStorage.setItem('tenantName', 'Muster Firma');
+}
 
 Log.info('env variables: ' + JSON.stringify(process.env),'index.js')
 

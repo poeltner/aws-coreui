@@ -37,6 +37,7 @@ const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
 const I18n = React.lazy(() => import('./views/I18n/I18n'));
+const TenantsDetailView = React.lazy(() => import('./views/Tenants/tenants.detail'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -82,6 +83,7 @@ const routes = [
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/i18n', exact: true,  name: 'I18n', component: I18n },
+  { path: '/:tenant/tenants', exact: true, name: 'Tenants', component: TenantsDetailView },
 ];
 
 export default routes;

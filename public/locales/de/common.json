@@ -9,5 +9,8 @@
     "Confirm": "Bestätigen",
     "Change":"Ändern",
     "Settings":"Einstellungen",
-    "Tenant": "Mandant"
+    "Tenant": "Mandant",
+    "Cancel": "Abbrechen",
+    "Switch": "Wechseln",
+    "PleaseSelect": "Bitte wählen"
 }

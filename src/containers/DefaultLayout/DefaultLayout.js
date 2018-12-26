@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
+import Log from '../../utils/Logger/Log';
 
 import {
   AppAside,
@@ -18,6 +19,7 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
+import { Auth } from 'aws-amplify';
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -29,7 +31,9 @@ class DefaultLayout extends Component {
 
   signOut(e) {
     e.preventDefault()
-    this.props.history.push('/login')
+    Auth.signOut()
+    .then(window.location.reload())
+    .catch(err => Log.error(JSON.stringify(err), 'DefaultLayout.DefaultLayout'));
   }
 
   render() {

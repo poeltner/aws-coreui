@@ -15,12 +15,6 @@ const defaultProps = {};
 
 class DefaultHeader extends Component {
 
-  onClickLogout() {
-    Auth.signOut()
-    .then(window.location.reload())
-    .catch(err => console.log(err));
-  }
-
   render() {
 
     // eslint-disable-next-line

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import GraphQlBootstrapTable from '../../components/GraphQlBootstrapTable/GraphQlBootstrapTable';
 import { API, graphqlOperation } from "aws-amplify";
 import Log from '../../utils/Logger/Log';
-
+import PropTypes from 'prop-types'
 class AdminBillingView extends Component {constructor(props) {
     super(props);
 
@@ -16,9 +16,9 @@ class AdminBillingView extends Component {constructor(props) {
   }
 
   async loadMe () {
-    console.log("click")
+    
     const selfData = await API.graphql(graphqlOperation(MeData, { tenantId: 'd854ae79-aa18-4e06-a493-d8067d047a22'}));
-    console.log(selfData);
+    
     if (selfData.data.me.user.tenants !== null) {
         this.setState({
             tenants: selfData.data.me.user.tenants,
@@ -38,7 +38,7 @@ class AdminBillingView extends Component {constructor(props) {
             dataField: 'date',
             text: this.props.t('Date'),
             headerClasses: 'text-primary',
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '25%', textAlign: 'left' };
             }
         },
@@ -46,7 +46,7 @@ class AdminBillingView extends Component {constructor(props) {
             dataField: 'invoiceNr',
             text: this.props.t('Invoice #'),
             headerClasses: 'text-primary',
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '25%', textAlign: 'left' };
             }
         },
@@ -54,7 +54,7 @@ class AdminBillingView extends Component {constructor(props) {
             dataField: 'amount',
             text: this.props.t('Amount'),
             headerClasses: 'text-primary',
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '25%', textAlign: 'center' };
             }
         },
@@ -62,7 +62,7 @@ class AdminBillingView extends Component {constructor(props) {
             dataField: 'status',
             text: this.props.t('Status'),
             headerClasses: 'text-primary',
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '25%', textAlign: 'right' };
             }
         }
@@ -126,6 +126,15 @@ class AdminBillingView extends Component {constructor(props) {
       </div>
     );
   }
+}
+
+AdminBillingView.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      tenant: PropTypes.string,
+    }),
+  }),
+  t: PropTypes.any
 }
 
 export default withNamespaces('view_admin') (AdminBillingView);

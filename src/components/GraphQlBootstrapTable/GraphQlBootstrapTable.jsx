@@ -1,9 +1,11 @@
 import React from "react"
-import { Button, Input, Row, Col } from "reactstrap";
+import { Button, Row, Col } from "reactstrap";
 import { Connect } from "aws-amplify-react";
 import { graphqlOperation } from "aws-amplify";
 import BootstrapTable from 'react-bootstrap-table-next';
 import {Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Log from "../../utils/Logger/Log";
 
 let limit = 10;
 
@@ -15,7 +17,9 @@ class GraphQlBootstrapTable extends React.Component{
         
         this.GET_QUERY = this.props.query;
         this.rowEvents.onClick =  this.rowEvents.onClick.bind(this);
-        console.log("tenant " + this.props.tenant);
+
+        Log.info("Tenant selected" + this.props.tenant, "GraphQlBootstrapTable");
+
         let qlprops = {}
         if (this.props.tenant != null)  { 
             qlprops = {tenant: this.props.tenant, limit};
@@ -30,8 +34,7 @@ class GraphQlBootstrapTable extends React.Component{
     }
 
     rowEvents = {
-        onClick: (e, row, rowIndex) => {
-            console.log("row " +JSON.stringify(row) + " row Index " + rowIndex);
+        onClick: (e, row) => {
             this.setState({redirect: this.props.tableConfig.redirectUrl+row.id})
            
         }
@@ -41,7 +44,6 @@ class GraphQlBootstrapTable extends React.Component{
     render(){
         // let page = 0;
         let prevToken = [];
-        let timeout = null;
 
 
         if (this.state.redirect) {
@@ -49,8 +51,6 @@ class GraphQlBootstrapTable extends React.Component{
                 <Redirect to={this.state.redirect} />
             );
         }
-
-        console.log("Query " + JSON.stringify(this.GET_QUERY));
 
         return (
         <div>
@@ -81,25 +81,24 @@ class GraphQlBootstrapTable extends React.Component{
                             }, 1000);
                         }} />  */}
           <Connect query={this.state.query}>
-            {({ loading, error, data, fetchMore }) => {
-                console.log("connnect ");
+            {({ loading, error, data }) => {
+                
                 if (loading) {
-                    console.log("loading ");
                     return "Loading...";
                 }
                 if (error) {
-                    console.log("Error " + JSON.stringify(error)) 
+                    Log.error("Error Loading query: " + JSON.stringify(error), "GraphQlBootstrapTable");
                     return `Error! ${error.message}`;
                 }
-                console.log("no error")
+                
                 let items = [];
                 let nextToken = null;
                 if ((data) && (data[this.props.tableConfig.qlmethod])) {
                     items = data[this.props.tableConfig.qlmethod].data.items;
                     
-                    console.log("data: " + JSON.stringify(data[this.props.tableConfig.qlmethod],2,2))
+                    // console.log("data: " + JSON.stringify(data[this.props.tableConfig.qlmethod],2,2))
                     if (data[this.props.tableConfig.qlmethod].data.nextToken != null) {
-                        console.log("nextoken exists ")
+                        // console.log("nextoken exists ")
                         nextToken = data[this.props.tableConfig.qlmethod].data.nextToken;
                     }
                 }
@@ -140,4 +139,10 @@ class GraphQlBootstrapTable extends React.Component{
     }
 }
 
- export default GraphQlBootstrapTable;
+GraphQlBootstrapTable.propTypes = {
+  query: PropTypes.string,
+  tableConfig: PropTypes.any,
+  tenant: PropTypes.string
+}
+
+export default GraphQlBootstrapTable;

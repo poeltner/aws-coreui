@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, FormGroup, Label, Input, Button } from 'reactstrap';
 import { withNamespaces } from 'react-i18next';
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import Log from '../../utils/Logger/Log';
+import PropTypes from 'prop-types';
 
 class ProfileEditView extends Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class ProfileEditView extends Component {
 
   async componentDidMount() {
     const selfData = await API.graphql(graphqlOperation(MeData));
-    console.log(selfData);
     this.setState({ 
       id: selfData.data.me.userId,
       firstName: selfData.data.me.user.firstName,
@@ -30,7 +30,6 @@ class ProfileEditView extends Component {
   }
 
   async onSubmit() {
-    console.log("click" + UpdateMe);
     const meData = await API.graphql(graphqlOperation(
       UpdateMe,
       {
@@ -42,7 +41,7 @@ class ProfileEditView extends Component {
         } 
       },
     ));
-    console.log(meData);
+    Log.info("Submit response: " + JSON.stringify(meData), "Profile.EditView");
   }
   
   handleInputChange(e) {
@@ -115,6 +114,10 @@ class ProfileEditView extends Component {
       </div>
     );
   }
+}
+
+ProfileEditView.propTypes = {
+  t: PropTypes.any
 }
 
 export default withNamespaces('view_profile') (ProfileEditView);

@@ -36,7 +36,7 @@ i18n
 
     ns: ['validation', 'common', 'glossary'],
 
-    debug: true,
+    debug: false,
     keySeparator: false, // we do not use keys in form messages.welcome
     backend: {
         // load from i18next-gitbook repo

@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col, Row, FormGroup, Input, Label, Button }
 import { withNamespaces } from 'react-i18next';
 import logo from '../../assets/img/brand/logo.svg'
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
 
 class AdminSubscriptionView extends Component {constructor(props) {
     super(props);
@@ -153,6 +154,15 @@ class AdminSubscriptionView extends Component {constructor(props) {
       </div>
     );
   }
+}
+
+AdminSubscriptionView.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      tenant: PropTypes.string,
+    }),
+  }),
+  t: PropTypes.any
 }
 
 export default withNamespaces('view_admin') (AdminSubscriptionView);

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Card, CardBody, CardHeader, Col, Row, FormGroup, Label, Input, Button } from 'reactstrap';
 import { withNamespaces } from 'react-i18next';
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import Log from '../../utils/Logger/Log';
+import PropTypes from 'prop-types';
 
 class DefaultRegisterTenant extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class DefaultRegisterTenant extends Component {
 
   async componentDidMount() {
     const selfData = await API.graphql(graphqlOperation(MeData));
-    console.log(selfData);
+    // console.log(selfData);
     this.setState({ 
       id: selfData.data.me.userId,
       firstName: selfData.data.me.user.firstName,
@@ -30,7 +31,7 @@ class DefaultRegisterTenant extends Component {
   }
 
   async onSubmit() {
-    console.log("click" + CreateMe);
+
     const meData = await API.graphql(graphqlOperation(
         CreateMe,
       {
@@ -43,7 +44,9 @@ class DefaultRegisterTenant extends Component {
         } 
       },
     ));
-    console.log(meData);
+
+    Log.info("Submit response: " +JSON.stringify(meData), "DefaultRegistration.DefaultRegisterTenant");
+    
     if (meData.data.createUser.id !== null) {
         if (meData.data.createUser.tenants !== null) {
             localStorage.setItem('tenant', meData.data.createUser.tenants[0].tenant.name);
@@ -145,6 +148,10 @@ class DefaultRegisterTenant extends Component {
         </div>
     );
   }
+}
+
+DefaultRegisterTenant.propTypes = {
+  t: PropTypes.any
 }
 
 export default withNamespaces('view_register') (DefaultRegisterTenant);

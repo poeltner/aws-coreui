@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import { withNamespaces } from 'react-i18next';
-
+import PropTypes from 'prop-types'
 class AdminSettingsView extends Component {constructor(props) {
     super(props);
 
@@ -35,6 +35,15 @@ class AdminSettingsView extends Component {constructor(props) {
       </div>
     );
   }
+}
+
+AdminSettingsView.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      tenant: PropTypes.string,
+    }),
+  }),
+  t: PropTypes.any
 }
 
 export default withNamespaces('view_admin') (AdminSettingsView);

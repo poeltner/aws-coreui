@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import Log from '../../utils/Logger/Log';
 import DefaultLayout from '../DefaultLayout/DefaultLayout';
 import DefaultRegisterTenant from './DefaultRegisterTenant';
@@ -16,7 +16,6 @@ class DefaultRegistration extends Component {
 
   async componentDidMount() {
     const selfData = await API.graphql(graphqlOperation(MeData));
-    console.log(selfData);
     if (selfData.data.me !== null) {
         this.setState({isRegistered: true})
     }
@@ -26,7 +25,6 @@ class DefaultRegistration extends Component {
 
 
   render() {
-    const { t } = this.props;
 
     if (this.state.isLoading) {
         return (

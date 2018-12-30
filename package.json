@@ -47,10 +47,7 @@
     "simple-line-icons": "^2.4.1"
   },
   "devDependencies": {
-<<<<<<< HEAD
-=======
     "babel-eslint": "^10.0.1",
->>>>>>> feature/eslint-support
     "eslint": "^5.11.1",
     "eslint-plugin-react": "^7.12.0",
     "react-scripts": "^2.1.1"

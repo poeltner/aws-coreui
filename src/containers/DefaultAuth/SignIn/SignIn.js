@@ -32,7 +32,7 @@ class DefaultSignIn extends SignIn {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7
     };
-    this.refs.notify.notificationAlert(options);
+    this.notify.notificationAlert(options);
   }
 
   onSignIn() {
@@ -54,7 +54,7 @@ class DefaultSignIn extends SignIn {
   
     return (
       <div className="app flex-row align-items-center">
-        <NotificationAlert ref="notify" />
+        <NotificationAlert ref={(c) => { this.notify = c; }} />
         <Container>
           <Row className="justify-content-center">
             <Col md="8">

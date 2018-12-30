@@ -9,9 +9,6 @@ import DefaultLanguageSwitcher from './DefaultLanguageSwitcher';
 import Log from '../../utils/Logger/Log';
 import DefaultTenantSwitcher from './DefaultTenantSwitcher';
 
-const propTypes = {
-  children: PropTypes.node,
-};
 
 const defaultProps = {};
 
@@ -110,7 +107,11 @@ class DefaultHeader extends Component {
   }
 }
 
-DefaultHeader.propTypes = propTypes;
+DefaultHeader.propTypes = {
+  children: PropTypes.node,
+  onLogout: PropTypes.func
+};
+
 DefaultHeader.defaultProps = defaultProps;
 
 export default withNamespaces('layout')(DefaultHeader);

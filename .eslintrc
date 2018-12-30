@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module",
+=======
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "allowImportExportEverywhere": true,
+>>>>>>> feature/eslint-support
         "ecmaFeatures": {
             "jsx": true,
             "modules": true,
@@ -18,7 +26,17 @@
     "settings": {
         "react": {
             "pragma": "React",
+<<<<<<< HEAD
             "version": "15.4.2"
         }
+=======
+            "version": "16.6.3"
+        }
+    },
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "node": true
+>>>>>>> feature/eslint-support
     }
 }

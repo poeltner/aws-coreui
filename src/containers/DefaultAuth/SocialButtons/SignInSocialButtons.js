@@ -3,6 +3,7 @@ import { FacebookButton } from './FacebookButton';
 import { Auth } from 'aws-amplify';
 import { JS } from '@aws-amplify/core';
 import { Strike } from 'aws-amplify-react/dist/Amplify-UI/Amplify-UI-Components-React';
+import PropTypes from 'prop-types';
 
 export class SignInSocialButtons extends Component {
 
@@ -64,4 +65,9 @@ export class SignInSocialButtons extends Component {
             </div>
         );
 }
+}
+SignInSocialButtons.propTypes = {
+  authState: PropTypes.string,
+  federated: PropTypes.any,
+  onStateChange: PropTypes.func
 }

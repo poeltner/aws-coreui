@@ -3,6 +3,7 @@ import { FacebookButton } from './FacebookButton';
 import { Auth } from 'aws-amplify';
 import { JS } from '@aws-amplify/core';
 import { Row, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 export class SignUpSocialButtons extends Component {
 
@@ -48,4 +49,8 @@ export class SignUpSocialButtons extends Component {
             </Row>
         );
 }
+}
+SignUpSocialButtons.propTypes = {
+  federated: PropTypes.any,
+  onStateChange: PropTypes.func
 }

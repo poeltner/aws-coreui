@@ -6,7 +6,6 @@ import { withNamespaces } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
 class DefaultConfirmSignUp  extends ConfirmSignUp  {
-
   error(err) {
     const { t } = this.props;
     Log.error(err, 'DefaultAuth.ConfirmSignUp');
@@ -26,7 +25,7 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7
     };
-    this.refs.notify.notificationAlert(options);
+    this.notify.notificationAlert(options);
   }
 
   render() {
@@ -38,7 +37,7 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
 
     return (
       <div className="app flex-row align-items-center">
-        <NotificationAlert ref="notify" />
+        <NotificationAlert ref={(c) => { this.notify = c; }} />
         <Container>
           <Row className="justify-content-center">
             <Col md="8">

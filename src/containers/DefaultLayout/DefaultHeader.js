@@ -16,13 +16,19 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
-  constructor(props) {
-    super(props);
+  static contextTypes = {
+    router: PropTypes.object
+  }
+
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       showLanguageSwitcher: false,
       showTenantSwitcher: false
     }
+
+    this.tenantSwitcher = React.createRef();
 
     this.toggleLanguageSwitcher = this.toggleLanguageSwitcher.bind(this);
     this.toggleTenantSwitcher = this.toggleTenantSwitcher.bind(this);
@@ -44,9 +50,16 @@ class DefaultHeader extends Component {
   }
 
   toggleTenantSwitcher() {
-    this.setState({
-      showTenantSwitcher: !this.state.showTenantSwitcher
-    })
+    // this.setState({
+    //   showTenantSwitcher: !this.state.showTenantSwitcher
+    // })
+    this.tenantSwitcher.toggle();
+    // this.tenantSwitcher.current.setState({modal:true});
+  }
+
+  onClickSettings(e) {
+    e.preventDefault()
+    this.context.router.history.push("/profile/edit");
   }
 
   render() {
@@ -57,7 +70,7 @@ class DefaultHeader extends Component {
     return (
       <React.Fragment>
         <DefaultLanguageSwitcher showModal={this.state.showLanguageSwitcher} toggle={this.toggleLanguageSwitcher}/>
-        <DefaultTenantSwitcher showModal={this.state.showTenantSwitcher} toggle={this.toggleTenantSwitcher}/>
+        <DefaultTenantSwitcher onRef={ref => (this.tenantSwitcher = ref)} />
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
           full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
@@ -81,9 +94,9 @@ class DefaultHeader extends Component {
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>{ t('Tenants') }</strong></DropdownItem>
               <DropdownItem><i className="fa fa-plus"></i> { t('Create tenant') }</DropdownItem>
-              <DropdownItem onClick={() => this.setState({ showTenantSwitcher: true })}><i className="fa fa-exchange"></i> { t('Switch tenant') }</DropdownItem>
+              <DropdownItem onClick={() => this.toggleTenantSwitcher()}><i className="fa fa-exchange"></i> { t('Switch tenant') }</DropdownItem>
               <DropdownItem header tag="div" className="text-center"><strong>{ t('Profile') }</strong></DropdownItem>
-              <DropdownItem><i className="fa fa-wrench"></i> { t('common:Settings') }</DropdownItem>
+              <DropdownItem onClick={e => this.onClickSettings(e)}><i className="fa fa-wrench"></i> { t('common:Settings') }</DropdownItem>
               <DropdownItem onClick={() => this.setState({ showLanguageSwitcher: true })}><i className="fa fa-language"></i> { t('Change language') }</DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> { t('common:Logout') }</DropdownItem>

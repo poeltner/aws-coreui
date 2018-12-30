@@ -37,7 +37,17 @@ const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
 const I18n = React.lazy(() => import('./views/I18n/I18n'));
+
 const TenantsDetailView = React.lazy(() => import('./views/Tenants/tenants.detail'));
+
+const AdminSettingsView = React.lazy(() => import('./views/Admin/admin.settings.view'));
+const AdminBillingView = React.lazy(() => import('./views/Admin/admin.billing.view'));
+const AdminAdminsView = React.lazy(() => import('./views/Admin/admin.admins.view'));
+const AdminSubscriptionView = React.lazy(() => import('./views/Admin/admin.subscription.view'));
+
+const ProfileEditView = React.lazy(() => import('./views/Profile/profile.edit.view'));
+
+
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -83,7 +93,15 @@ const routes = [
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/i18n', exact: true,  name: 'I18n', component: I18n },
+
+  { path: '/profile/edit', exact: true,  name: 'ProfileEdit', component: ProfileEditView },
+
   { path: '/:tenant/tenants', exact: true, name: 'Tenants', component: TenantsDetailView },
+  
+  { path: '/:tenant/admin/settings', exact: true, name: 'Settings', component: AdminSettingsView },
+  { path: '/:tenant/admin/billing', exact: true, name: 'Billing', component: AdminBillingView },
+  { path: '/:tenant/admin/subscription', exact: true, name: 'Subscription', component: AdminSubscriptionView },
+  { path: '/:tenant/admin/admins', exact: true, name: 'Admins', component: AdminAdminsView },
 ];
 
 export default routes;

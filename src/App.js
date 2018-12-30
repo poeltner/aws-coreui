@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 // import { renderRoutes } from 'react-router-config';

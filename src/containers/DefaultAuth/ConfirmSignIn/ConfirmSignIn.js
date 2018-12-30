@@ -27,7 +27,7 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7
     };
-    this.refs.notify.notificationAlert(options);
+    this.notify.notificationAlert(options);
   }
 
   render() {
@@ -39,7 +39,7 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
 
     return (
       <div className="app flex-row align-items-center">
-        <NotificationAlert ref="notify" />
+        <NotificationAlert ref={(c) => { this.notify = c; }} />
         <Container>
           <Row className="justify-content-center">
             <Col md="8">

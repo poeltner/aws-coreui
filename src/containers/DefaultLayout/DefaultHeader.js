@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Auth } from 'aws-amplify';
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
-const propTypes = {
-  children: PropTypes.node,
-};
 
 const defaultProps = {};
 
@@ -78,7 +74,11 @@ class DefaultHeader extends Component {
   }
 }
 
-DefaultHeader.propTypes = propTypes;
+DefaultHeader.propTypes = {
+  children: PropTypes.node,
+  onLogout: PropTypes.func
+};
+
 DefaultHeader.defaultProps = defaultProps;
 
 export default DefaultHeader;

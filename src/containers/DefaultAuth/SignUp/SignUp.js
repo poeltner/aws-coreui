@@ -32,7 +32,7 @@ class DefaultSignUp extends SignUp {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7
     };
-    this.refs.notify.notificationAlert(options);
+    this.notify.notificationAlert(options);
   }
 
   onSignUp() {
@@ -40,7 +40,7 @@ class DefaultSignUp extends SignUp {
       this.inputs.email = this.inputs.username;
       this.signUp();
     } else {
-      console.log("Passwords do not match");
+      Log.warn("Passwords do not match","DefaultAuth.SignUp");
       this.error({message:"Passwords do not match"});
     }
   }
@@ -54,7 +54,7 @@ class DefaultSignUp extends SignUp {
 
     return (
       <div className="app flex-row align-items-center">
-        <NotificationAlert ref="notify" />
+        <NotificationAlert ref={(c) => { this.notify = c; }} />
         <Container>
           <Row className="justify-content-center">
             <Col md="6">

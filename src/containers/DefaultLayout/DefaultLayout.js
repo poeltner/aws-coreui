@@ -21,7 +21,7 @@ import navigation from '../../_nav';
 import routes from '../../routes';
 import { Auth } from 'aws-amplify';
 
-const DefaultAside = React.lazy(() => import('./DefaultAside'));
+const DefaultAside = React.lazy(() => import('./DefaultAside')); 
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 

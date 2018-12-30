@@ -26,7 +26,7 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7
     };
-    this.refs.notify.notificationAlert(options);
+    this.notify.notificationAlert(options);
   }
 
   render() {
@@ -41,7 +41,7 @@ class DefaultRequireNewPassword   extends RequireNewPassword   {
 
     return (
       <div className="app flex-row align-items-center">
-        <NotificationAlert ref="notify" />
+        <NotificationAlert ref={(c) => { this.notify = c; }} />
         <Container>
           <Row className="justify-content-center">
             <Col md="8">

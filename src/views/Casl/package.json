@@ -1,0 +1,6 @@
+{
+  "name": "casl",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./casl.js"
+}

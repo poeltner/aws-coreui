@@ -42,6 +42,11 @@ export default {
       icon: 'icon-star',
     },
     {
+      name: 'Casl',
+      url: '/casl',
+      icon: 'icon-star',
+    },
+    {
       title: true,
       name: 'Components',
       wrapper: {

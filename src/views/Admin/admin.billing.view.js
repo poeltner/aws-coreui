@@ -6,6 +6,7 @@ import GraphQlBootstrapTable from '../../components/GraphQlBootstrapTable/GraphQ
 import { API, graphqlOperation } from "aws-amplify";
 import Log from '../../utils/Logger/Log';
 import PropTypes from 'prop-types'
+import BillingAddressModal from './modals/billingaddress.modal';
 class AdminBillingView extends Component {constructor(props) {
     super(props);
 
@@ -13,11 +14,13 @@ class AdminBillingView extends Component {constructor(props) {
         tenant: this.props.match.params.tenant,
     }
     this.loadMe = this.loadMe.bind(this);
+
+    this.billingAddressModal = React.createRef();
   }
 
   async loadMe () {
     
-    const selfData = await API.graphql(graphqlOperation(MeData, { tenantId: 'd854ae79-aa18-4e06-a493-d8067d047a22'}));
+    const selfData = await API.graphql(graphqlOperation(MeData, { tenantId: this.state.tenant}));
     
     if (selfData.data.me.user.tenants !== null) {
         this.setState({
@@ -77,6 +80,7 @@ class AdminBillingView extends Component {constructor(props) {
 
     return (
       <div className="animated fadeIn">
+      <BillingAddressModal tenant={this.state.tenant} onRef={ref => (this.billingAddressModal = ref)} />
         <Card>
           <CardHeader>
             <i className="fa fa-font-awesome"></i> <b>Billing:</b> { this.state.tenant } <Button onClick={this.loadMe}>LoadMe</Button>
@@ -87,7 +91,7 @@ class AdminBillingView extends Component {constructor(props) {
                 <strong>{ t('Payment method') }:</strong> <Link to="">{ t('common:Change') }</Link><br/>
               </Col>
               <Col>
-                <strong>{ t('Billing address') }</strong> <Link to="">{ t('common:Change') }</Link><br/>
+                <strong>{ t('Billing address') }</strong> <Button color="link" onClick={this.billingAddressModal.toggle}>{ t('common:Change') }</Button><br/>
               </Col>
               <Col>
                 <strong>{ t('Billing to') }</strong> <Link to="">{ t('common:Add') }</Link><br/>

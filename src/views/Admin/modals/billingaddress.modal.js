@@ -5,9 +5,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Col, Inp
 import { API, graphqlOperation } from "aws-amplify";
 import PropTypes from "prop-types";
 import { withNamespaces } from 'react-i18next';
-import Log from '../../utils/Logger/Log';
+import Log from '../../../utils/Logger/Log';
 
-class DefaultTenantSwitcher extends React.Component {
+class BillingAddressModal extends React.Component {
   static contextTypes = {
     router: PropTypes.object
   }
@@ -15,10 +15,10 @@ class DefaultTenantSwitcher extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      tenant: this.props.tenant,
       modal: false,
       isLoading: true,
-      tenant: '',
-      tenants: []
+      input: {}
     };    
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -33,23 +33,32 @@ class DefaultTenantSwitcher extends React.Component {
     this.props.onRef(undefined)
   }
 
-  async updateTenantList () {
-    const selfData = await API.graphql(graphqlOperation(MeData));
-    // console.log(selfData);
-    if (selfData.data.me.user.tenants !== null) {
+  async loadData () {
+    this.setState({isLoading: true});
+    const selfData = await API.graphql(graphqlOperation(MeData, { tenantId: this.state.tenant}));
+    console.log(selfData);
+    if ((selfData.data.me.user.tenants !== null) 
+      && (selfData.data.me.user.tenants[0].tenantId === this.state.tenant)) {
         this.setState({
-            tenants: selfData.data.me.user.tenants,
+            input: selfData.data.me.user.tenants[0].tenant.billingAddress,
             isLoading: false
           })
     }
     this.setState({isLoading: false});
-    Log.info('Self loaded ' + JSON.stringify(this.state), 'DefaultRegistration.DefaultRegistration');
+    Log.info('Self loaded ' + JSON.stringify(this.state), 'Admin.BillingAddressModal');
+  }
+
+  async onClickUpdate() {
+    const requestUpdate = {
+      billingAddress: this.state.input
+    }
+    const tenant = await API.graphql(graphqlOperation(UpdateTenant, { tenantId: this.state.tenant, input: requestUpdate}));
+    console.log("response " + JSON.stringify(tenant));
   }
 
   toggle() {
-    // console.log("toggle click")
     if (!this.state.modal) {
-      this.updateTenantList();
+      this.loadData();
     }
     this.setState({
       modal: !this.state.modal
@@ -57,7 +66,9 @@ class DefaultTenantSwitcher extends React.Component {
   }
 
   handleInputChange(e) {
-    this.setState({tenant: e.target.value});
+    const input = {};
+    input[e.target.name] = e.target.value;
+    this.setState({input});
   }
 
 
@@ -76,36 +87,35 @@ class DefaultTenantSwitcher extends React.Component {
       }
     }
 
-    const MakeSelectOptions = function(option) {
-        return <option value={option.tenant.name}>{option.tenant.name}</option>;
-    };
-
     const { t } = this.props;
 
 
     return (
       <div>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}><strong>{ t('Switch tenant') }</strong></ModalHeader>
+          <ModalHeader toggle={this.toggle}><strong>{ t('Update billing address') }</strong></ModalHeader>
           { this.state.isLoading ?
             <div className="animated fadeIn pt-3 text-center">Loading...</div>
             :
           <ModalBody>
             <FormGroup row className="pr-1">
               <Col md="3">
-                <Label htmlFor="select" className="pr-1">{ t('common:Tenant')}:</Label>
+                <Label htmlFor="select" className="pr-1">{ t('Company')}:</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="select" id="select" onChange={this.handleInputChange}>
-                  <option value="">{ t('common:PleaseSelect')}</option>
-                  { this.state.tenants.map(MakeSelectOptions) }
-                </Input>
+                <Input 
+                  type="input" 
+                  name="company" 
+                  id="select" 
+                  value={this.state.input.company}
+                  onChange={this.handleInputChange} 
+                />
               </Col>
             </FormGroup>
           </ModalBody>
           }
           <ModalFooter>
-            <Button color="primary" onClick={() => changeTenant()}>{ t('common:Switch') }</Button>
+            <Button color="primary" onClick={() => this.onClickUpdate()}>{ t('common:Change') }</Button>
             <Button color="secondary" onClick={this.toggle}>{ t('common:Cancel') }</Button>
           </ModalFooter>
         </Modal>
@@ -114,9 +124,9 @@ class DefaultTenantSwitcher extends React.Component {
   }
 }
 
-export default withNamespaces('layout') (DefaultTenantSwitcher);
+export default withNamespaces('layout') (BillingAddressModal);
 
-const MeData = `query Me {
+const MeData = `query Me($tenantId: String) {
   me {
       userId
       user {
@@ -125,13 +135,27 @@ const MeData = `query Me {
         lastName
         email
 
-        tenants {
+        tenants(tenantId: $tenantId) {
           tenantId
           tenant {
             id
             name
+
+            billingAddress {
+              company
+            }
           }
         }
       }
   }
 }`;
+
+const UpdateTenant = `mutation UpdateTenant($tenantId: ID!, $input: TenantInput!) {
+  updateTenant(tenantId: $tenantId, input: $input) {
+    id
+    name
+    billingAddress {
+      company
+    }
+  }
+}`

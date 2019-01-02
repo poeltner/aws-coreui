@@ -13,7 +13,6 @@ import Log from './utils/Logger/Log';
 // Add these lines:
 if (process.env.NODE_ENV !== 'production') {
     localStorage.setItem('debug', process.env.REACT_APP_APP_NAME+':*');
-    Log.info('env variables: ' + JSON.stringify(process.env),'index.js')
 }
 
 if (localStorage.getItem('tenant') == null) {

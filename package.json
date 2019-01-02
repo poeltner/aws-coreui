@@ -12,6 +12,8 @@
     "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
   },
   "dependencies": {
+    "@casl/ability": "^2.5.1",
+    "@casl/react": "^0.8.1",
     "@coreui/coreui": "^2.1.1",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
     "@coreui/icons": "0.3.0",

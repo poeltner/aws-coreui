@@ -159,7 +159,7 @@ const ListAssets = `query ListAssets($tenant: String!, $limit: Int, $nextToken: 
   }
 }`;
 
-const MeData = `query Me($tenantId: String) {
+const MeData = `query Me($tenant: String) {
   me {
       userId
       user {
@@ -168,7 +168,7 @@ const MeData = `query Me($tenantId: String) {
         lastName
         email
 
-        tenants(tenantId: $tenantId) {
+        tenants(tenant: $tenant) {
           tenantId
           tenant {
             id

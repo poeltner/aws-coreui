@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { withNamespaces } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
-class BillingAddressModal extends React.Component {
+class UserInviteModal extends React.Component {
   static contextTypes = {
     router: PropTypes.object
   }
@@ -23,6 +23,7 @@ class BillingAddressModal extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onClickInvite = this.onClickInvite.bind(this);
   }
 
   componentDidMount() {
@@ -33,32 +34,14 @@ class BillingAddressModal extends React.Component {
     this.props.onRef(undefined)
   }
 
-  async loadData () {
-    this.setState({isLoading: true});
-    const selfData = await API.graphql(graphqlOperation(MeData, { tenantId: this.state.tenant}));
-    console.log(selfData);
-    if ((selfData.data.me.user.tenants !== null) 
-      && (selfData.data.me.user.tenants[0].tenantId === this.state.tenant)) {
-        this.setState({
-            input: selfData.data.me.user.tenants[0].tenant.billingAddress,
-            isLoading: false
-          })
-    }
-    this.setState({isLoading: false});
-    Log.info('Self loaded ' + JSON.stringify(this.state), 'Admin.BillingAddressModal');
-  }
-
-  async onClickUpdate() {
-    const requestUpdate = {
-      billingAddress: this.state.input
-    }
-    const tenant = await API.graphql(graphqlOperation(UpdateTenant, { tenantId: this.state.tenant, input: requestUpdate}));
-    console.log("response " + JSON.stringify(tenant));
+  async onClickInvite() {
+    const user = await API.graphql(graphqlOperation(InviteUser, { tenant: this.state.tenant, email: this.state.input.email}));
+    console.log("response " + JSON.stringify(user));
   }
 
   toggle() {
     if (!this.state.modal) {
-      this.loadData();
+    //   this.loadData();
     }
     this.setState({
       modal: !this.state.modal
@@ -80,29 +63,25 @@ class BillingAddressModal extends React.Component {
     return (
       <div>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}><strong>{ t('Update billing address') }</strong></ModalHeader>
-          { this.state.isLoading ?
-            <div className="animated fadeIn pt-3 text-center">Loading...</div>
-            :
+          <ModalHeader toggle={this.toggle}><strong>{ t('Invite new user to tenant') }</strong></ModalHeader>
           <ModalBody>
             <FormGroup row className="pr-1">
               <Col md="3">
-                <Label htmlFor="select" className="pr-1">{ t('Company')}:</Label>
+                <Label htmlFor="select" className="pr-1">{ t('Email')}:</Label>
               </Col>
               <Col xs="12" md="9">
                 <Input 
                   type="input" 
-                  name="company" 
+                  name="email" 
                   id="select" 
-                  value={this.state.input.company || ''}
+                  value={this.state.input.email || ''}
                   onChange={this.handleInputChange} 
                 />
               </Col>
             </FormGroup>
           </ModalBody>
-          }
           <ModalFooter>
-            <Button color="primary" onClick={() => this.onClickUpdate()}>{ t('common:Change') }</Button>
+            <Button color="primary" onClick={() => this.onClickInvite()}>{ t('common:Invite') }</Button>
             <Button color="secondary" onClick={this.toggle}>{ t('common:Cancel') }</Button>
           </ModalFooter>
         </Modal>
@@ -111,7 +90,7 @@ class BillingAddressModal extends React.Component {
   }
 }
 
-export default withNamespaces('layout') (BillingAddressModal);
+export default withNamespaces('layout') (UserInviteModal);
 
 const MeData = `query Me($tenantId: String) {
   me {
@@ -137,12 +116,10 @@ const MeData = `query Me($tenantId: String) {
   }
 }`;
 
-const UpdateTenant = `mutation UpdateTenant($tenantId: ID!, $input: TenantInput!) {
-  updateTenant(tenantId: $tenantId, input: $input) {
+const InviteUser = `mutation inviteUser($tenant: ID!, $email: String!) {
+    inviteUser(tenant: $tenant, email: $email) {
     id
-    name
-    billingAddress {
-      company
-    }
+    email
+    status
   }
 }`

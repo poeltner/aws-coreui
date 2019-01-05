@@ -25,30 +25,10 @@ export default {
           url: '/'+tenant+'/admin/subscription',
           icon: 'cui-basket-loaded'
       },
-<<<<<<< HEAD
       {
         name: 'Billing',
         url: '/'+tenant+'/admin/billing',
         icon: 'cui-credit-card'
-=======
-    },
-    {
-      name: 'I18n',
-      url: '/i18n',
-      icon: 'icon-star',
-    },
-    {
-      name: 'Casl',
-      url: '/casl',
-      icon: 'icon-star',
-    },
-    {
-      title: true,
-      name: 'Components',
-      wrapper: {
-        element: '',
-        attributes: {},
->>>>>>> feature/casl-support
       },
       {
         name: 'Admins',

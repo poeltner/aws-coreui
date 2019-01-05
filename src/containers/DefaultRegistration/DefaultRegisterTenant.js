@@ -49,7 +49,7 @@ class DefaultRegisterTenant extends Component {
     
     if (meData.data.createUser.id !== null) {
         if (meData.data.createUser.tenants !== null) {
-            localStorage.setItem('tenant', meData.data.createUser.tenants[0].tenant.name);
+            localStorage.setItem('tenant', meData.data.createUser.tenants[0].tenant.id);
             window.location.reload();
         }
         

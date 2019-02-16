@@ -42,12 +42,15 @@ const TenantsDetailView = React.lazy(() => import('./views/Tenants/tenants.detai
 
 const AdminSettingsView = React.lazy(() => import('./views/Admin/admin.settings.view'));
 const AdminBillingView = React.lazy(() => import('./views/Admin/admin.billing.view'));
-const AdminAdminsView = React.lazy(() => import('./views/Admin/admin.admins.view'));
+const AdminTeamView = React.lazy(() => import('./views/Admin/admin.team.view'));
 const AdminSubscriptionView = React.lazy(() => import('./views/Admin/admin.subscription.view'));
 
 const ProfileEditView = React.lazy(() => import('./views/Profile/profile.edit.view'));
 
+const BasicPage = React.lazy(() => import('./views/DemoPages/BasicPage'));
+const AdvancedPage = React.lazy(() => import('./views/DemoPages/AdvancedPage'));
 
+const Formio = React.lazy(() => import('./views/Formio/Formio'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -101,7 +104,11 @@ const routes = [
   { path: '/:tenant/admin/settings', exact: true, name: 'Settings', component: AdminSettingsView },
   { path: '/:tenant/admin/billing', exact: true, name: 'Billing', component: AdminBillingView },
   { path: '/:tenant/admin/subscription', exact: true, name: 'Subscription', component: AdminSubscriptionView },
-  { path: '/:tenant/admin/admins', exact: true, name: 'Admins', component: AdminAdminsView },
+  { path: '/:tenant/admin/team', exact: true, name: 'Team', component: AdminTeamView },
+
+  { path: '/:tenant/demo/basic', exact: true, name: 'Team', component: BasicPage },
+  { path: '/:tenant/demo/advanced', exact: true, name: 'Team', component: AdvancedPage },
+  { path: '/:tenant/demo/formio', exact: true, name: 'Formio', component: Formio },
 ];
 
 export default routes;

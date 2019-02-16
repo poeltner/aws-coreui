@@ -10,6 +10,40 @@ export default {
         variant: 'info',
         text: 'NEW',
       },
+      subject: 'Todo',
+      action: 'read',
+    },
+    {
+      title: true,
+      name: 'Demo Pages',
+      wrapper: {            // optional wrapper object
+        element: '',        // required valid HTML5 element tag
+        attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
+      },
+      class: '',         // optional class names space delimited list for title item ex: "text-center",
+      subject: 'Demo',
+      action: 'read',
+    },
+    {
+      name: 'Basic Page',
+      url: '/'+tenant+'/demo/basic',
+      icon: 'cui-basket-loaded',
+      subject: 'Todo',
+      action: 'read',
+    },
+    {
+      name: 'Advanced Page',
+      url: '/'+tenant+'/demo/advanced',
+      icon: 'cui-basket-loaded',
+      subject: 'Todo',
+      action: 'create',
+    },
+    {
+      name: 'Formio',
+      url: '/'+tenant+'/demo/formio',
+      icon: 'cui-basket-loaded',
+      subject: 'Todo',
+      action: 'read',
     },
     {
         title: true,
@@ -18,27 +52,37 @@ export default {
           element: '',        // required valid HTML5 element tag
           attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
         },
-        class: ''             // optional class names space delimited list for title item ex: "text-center"
+        class: '',             // optional class names space delimited list for title item ex: "text-center"
+        subject: 'Admin',
+        action: 'read',
       },
       {
           name: 'Subscription',
           url: '/'+tenant+'/admin/subscription',
-          icon: 'cui-basket-loaded'
+          icon: 'cui-basket-loaded',
+          subject: 'Admin',
+          action: 'read',
       },
       {
         name: 'Billing',
         url: '/'+tenant+'/admin/billing',
-        icon: 'cui-credit-card'
+        icon: 'cui-credit-card',
+        subject: 'Admin',
+        action: 'read',
       },
       {
-        name: 'Admins',
-        url: '/'+tenant+'/admin/admins',
-        icon: 'cui-user-female'
+        name: 'Team',
+        url: '/'+tenant+'/admin/team',
+        icon: 'cui-user-female',
+        subject: 'Admin',
+        action: 'read',
       },
       {
         name: 'Settings',
         url: '/'+tenant+'/admin/settings',
-        icon: 'cui-cog'
+        icon: 'cui-cog',
+        subject: 'Admin',
+        action: 'read',
       },
     // {
     //   title: true,

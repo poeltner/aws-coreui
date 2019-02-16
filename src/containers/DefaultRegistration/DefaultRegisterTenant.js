@@ -10,49 +10,31 @@ class DefaultRegisterTenant extends Component {
     super(props);
 
     this.state = {
-      id: '',
-      firstName: '',
-      lastName: '',
-      email: ''
+      name: null,
+      description: null
     }
     this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  async componentDidMount() {
-    const selfData = await API.graphql(graphqlOperation(MeData));
-    // console.log(selfData);
-    this.setState({ 
-      id: selfData.data.me.userId,
-      firstName: selfData.data.me.user.firstName,
-      lastName: selfData.data.me.user.lastName,
-      email: selfData.data.me.user.email,
-    });
-    Log.info('Self loaded ' + JSON.stringify(this.state), 'Profile.EditView');
   }
 
   async onSubmit() {
 
     const meData = await API.graphql(graphqlOperation(
-        CreateMe,
+        CreateTenant,
       {
-        id: this.state.id,
+        tenantId: this.state.name,
         input: {
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
-          email: this.state.email,
-          tenantName: this.state.tenantName
+            name: this.state.name,
+            description: this.state.description,
         } 
       },
     ));
 
     Log.info("Submit response: " +JSON.stringify(meData), "DefaultRegistration.DefaultRegisterTenant");
     
-    if (meData.data.createUser.id !== null) {
-        if (meData.data.createUser.tenants !== null) {
-            localStorage.setItem('tenant', meData.data.createUser.tenants[0].tenant.id);
-            window.location.reload();
-        }
+    if (meData.data.createTenant.id !== null) {
         
+        await localStorage.setItem('tenant', meData.data.createTenant.id);
+        this.props.reload();
     }
   }
   
@@ -75,61 +57,33 @@ class DefaultRegisterTenant extends Component {
                         <div className="animated fadeIn">
                             <Card>
                             <CardHeader>
-                                <i className="fa fa-font-awesome"></i> <b>Profile:</b> 
+                                <i className="fa fa-font-awesome"></i> <b>Create Tenant</b> 
                             </CardHeader>
                             <CardBody>
-                                <FormGroup row className="pr-1">
+                            <FormGroup row className="pr-1">
                                 <Col md="3">
-                                    <Label htmlFor="tenantName" className="pr-1">{ t('common:TenantName')}:</Label>
+                                    <Label htmlFor="name" className="pr-1">{ t('common:TenantName')}:</Label>
                                 </Col>
                                 <Col xs="12" md="9">
                                     <Input 
                                     type="text" 
-                                    name="tenantName" 
-                                    id="tenantName" 
-                                    value={this.state.tenantName}
+                                    name="name" 
+                                    id="name" 
+                                    value={this.state.name || ''}
                                     onChange={this.handleInputChange} 
                                     />
                                 </Col>
                                 </FormGroup>
                                 <FormGroup row className="pr-1">
                                 <Col md="3">
-                                    <Label htmlFor="firstName" className="pr-1">{ t('common:FirstName')}:</Label>
+                                    <Label htmlFor="description" className="pr-1">{ t('common:Description')}:</Label>
                                 </Col>
                                 <Col xs="12" md="9">
                                     <Input 
                                     type="text" 
-                                    name="firstName" 
-                                    id="firstName" 
-                                    value={this.state.firstName}
-                                    onChange={this.handleInputChange} 
-                                    />
-                                </Col>
-                                </FormGroup>
-                                <FormGroup row className="pr-1">
-                                <Col md="3">
-                                    <Label htmlFor="lastName" className="pr-1">{ t('common:LastName')}:</Label>
-                                </Col>
-                                <Col xs="12" md="9">
-                                    <Input 
-                                    type="text"
-                                    name="lastName"
-                                    id="lastName"
-                                    value={this.state.lastName}
-                                    onChange={this.handleInputChange} 
-                                    />
-                                </Col>
-                                </FormGroup>
-                                <FormGroup row className="pr-1">
-                                <Col md="3">
-                                    <Label htmlFor="email" className="pr-1">{ t('common:Email')}:</Label>
-                                </Col>
-                                <Col xs="12" md="9">
-                                    <Input
-                                    type="text"
-                                    name="email"
-                                    id="select"
-                                    value={this.state.email}
+                                    name="description" 
+                                    id="description" 
+                                    value={this.state.description || ''}
                                     onChange={this.handleInputChange} 
                                     />
                                 </Col>
@@ -151,36 +105,18 @@ class DefaultRegisterTenant extends Component {
 }
 
 DefaultRegisterTenant.propTypes = {
-  t: PropTypes.any
+  t: PropTypes.any,
+  reload: PropTypes.func,
 }
 
 export default withNamespaces('view_register') (DefaultRegisterTenant);
 
-const CreateMe = `mutation CreateUser($input: UserInput!) {
-  createUser(input: $input) {
+const CreateTenant = `mutation CreateTenant($tenantId: ID!, $input: TenantInput!) {
+  createTenant(tenantId: $tenantId, input: $input) {
     id
-    firstName
-    lastName
-    email
-
-    tenants {
-        tenantId
-        tenant {
-            id
-            name
-        }
-    }
+    name
+    description
   }
 }`;
 
-const MeData = `query Me {
-  me {
-      userId
-      user {
-        id
-        firstName
-        lastName
-        email
-      }
-  }
-}`;
+

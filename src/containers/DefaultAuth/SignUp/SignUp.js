@@ -6,11 +6,15 @@ import NotificationAlert from 'react-notification-alert';
 import { SignUpSocialButtons } from '../SocialButtons/SignUpSocialButtons';
 import { withNamespaces } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
+import defaultSignUpFields from './signUpFields';
 
 class DefaultSignUp extends SignUp {
   constructor(props) {
     super(props);
     this.onSignUp = this.onSignUp.bind(this);
+    this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
+    this.defaultSignUpFields = defaultSignUpFields;
+    this.signUpFields = defaultSignUpFields;
   }
 
   error(err) {
@@ -35,8 +39,12 @@ class DefaultSignUp extends SignUp {
     this.notify.notificationAlert(options);
   }
 
+  handleRepeatPasswordChange(e) {
+    this.setState({repeatpassword: e.target.value});
+  }
+
   onSignUp() {
-    if (this.inputs.password === this.inputs.repeatpassword) {
+    if (this.inputs.password === this.state.repeatpassword) {
       this.inputs.email = this.inputs.username;
       this.signUp();
     } else {
@@ -106,7 +114,7 @@ class DefaultSignUp extends SignUp {
                         autoComplete="password"
                         key="repeatpassword"
                         name="repeatpassword"
-                        onChange={this.handleInputChange}
+                        onChange={this.handleRepeatPasswordChange}
                       />
                     </InputGroup>
                     <Row>

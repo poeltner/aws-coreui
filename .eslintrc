@@ -26,6 +26,8 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "node": true
+        "node": true,
+        "mocha": true,
+        "jest": true
     }
 }

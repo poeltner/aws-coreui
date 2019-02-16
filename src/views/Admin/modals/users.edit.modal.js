@@ -1,7 +1,8 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Col, Input, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
+  FormGroup, FormFeedback, Col, Input, Label } from 'reactstrap';
 import { API, graphqlOperation } from "aws-amplify";
 import PropTypes from "prop-types";
 import { withNamespaces } from 'react-i18next';
@@ -22,11 +23,15 @@ class UsersEditModal extends React.Component {
           user: {
               email: ''
           }
-      }
+      },
+      roles: [],
+      errorMessage: '',
+      roleState: '',
     };    
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onClickUpdate = this.onClickUpdate.bind(this);
     this.onClickDeactiviate = this.onClickDeactiviate.bind(this);
     this.onClickActivate = this.onClickActivate.bind(this);
   }
@@ -47,53 +52,69 @@ class UsersEditModal extends React.Component {
     if ((selfData.data.me.user.tenants !== null) 
       && (selfData.data.me.user.tenants[0].tenantId === this.state.tenant)) {
         this.setState({
-            input: {
-              firstname: selfData.data.me.user.tenants[0].tenant.users.items[0].user.firstname || '',
-              lastName: selfData.data.me.user.tenants[0].tenant.users.items[0].user.lastName || '',
-              email: selfData.data.me.user.tenants[0].tenant.users.items[0].user.email || '',
-              role: selfData.data.me.user.tenants[0].tenant.users.items[0].role,
-              isAdmin: selfData.data.me.user.tenants[0].tenant.users.items[0].isAdmin || false,
-            },
-            isActive: (selfData.data.me.user.tenants[0].tenant.users.items[0].status !== 'DEACTIVATED') ? true : false,
-            isLoading: false
-          })
+          roles:  selfData.data.me.user.tenants[0].tenant.tenantRoles || [],
+          input: {
+            firstname: selfData.data.me.user.tenants[0].tenant.users.items[0].user.firstname || '',
+            lastName: selfData.data.me.user.tenants[0].tenant.users.items[0].user.lastName || '',
+            email: selfData.data.me.user.tenants[0].tenant.users.items[0].user.email || '',
+            role: selfData.data.me.user.tenants[0].tenant.users.items[0].role,
+            isAdmin: selfData.data.me.user.tenants[0].tenant.users.items[0].isAdmin || false,
+          },
+          isActive: (selfData.data.me.user.tenants[0].tenant.users.items[0].status !== 'DEACTIVATED') ? true : false,
+          isLoading: false
+        })
     }
     this.setState({isLoading: false});
     Log.info('Self loaded ' + JSON.stringify(this.state), 'Admin.BillingAddressModal');
   }
 
   async onClickUpdate() {
+    this.setState({isLoadingUpdate: true});
     const requestUpdate = {
       userId: this.state.userId,
       role: this.state.input.role,
       isAdmin: this.state.input.isAdmin,
     }
-    const userRole = await API.graphql(graphqlOperation(UpdateUserRole, { tenant: this.state.tenant, input: requestUpdate}));
-    Log.info(`Updated user Role ${JSON.stringify(userRole)}`);
+    try {
+      const userRole = await API.graphql(graphqlOperation(UpdateUserRole, { tenant: this.state.tenant, input: requestUpdate}));
+      Log.info(`Updated user Role ${JSON.stringify(userRole)}`);
+      this.props.reload();
+      this.toggle();
+    } catch(error) {
+      if (error.errors[0].message.slice(0,18) === "No availbale roles") {
+        this.setState({roleState: 'has-error'});
+      }
+    }
+    this.setState({isLoadingUpdate: false});
   }
 
   async onClickDeactiviate() {
+    this.setState({isLoadingDeactiviate: true});
     const requestUpdate = {
       userId: this.state.userId,
       deactivate: true,
     }
     const userRole = await API.graphql(graphqlOperation(UpdateUserRole, { tenant: this.state.tenant, input: requestUpdate}));
     Log.info(`Updated user Role ${JSON.stringify(userRole)}`);
+    this.props.reload();
+    this.setState({isLoadingDeactiviate: false});
+    this.toggle();
   }
 
   async onClickActivate() {
+    this.setState({isLoadingActivate: true});
     const requestUpdate = {
       userId: this.state.userId,
       deactivate: false,
     }
     const userRole = await API.graphql(graphqlOperation(UpdateUserRole, { tenant: this.state.tenant, input: requestUpdate}));
     Log.info(`Updated user Role ${JSON.stringify(userRole)}`);
+    this.props.reload();
+    this.toggle();
+    this.setState({isLoadingActivate: false});
   }
 
   toggle() {
-    if (!this.state.modal) {
-    //   this.loadData();
-    }
     this.setState({
       modal: !this.state.modal
     })
@@ -117,9 +138,7 @@ class UsersEditModal extends React.Component {
 
 
   render() {
-
     const { t } = this.props;
-
 
     return (
       <div>
@@ -134,8 +153,13 @@ class UsersEditModal extends React.Component {
                 <Label htmlFor="email" className="pr-1">{ t('User')}:</Label>
               </Col>
               <Col xs="12" md="9">
-                {this.state.input.firstName || ''} {this.state.input.lastName || ''}<br/>
-                {this.state.input.email || ''}
+              { ((this.state.input.firstName !== '') && (this.state.input.lastName !== '')) ?
+                <div>
+                  <strong>{this.state.input.firstName || ''} {this.state.input.lastName || ''}</strong>
+                </div>
+                : null
+              }
+                <div>{this.state.input.email || ''}</div>
               </Col>
             </FormGroup>
             <FormGroup row className="pr-1">
@@ -149,18 +173,25 @@ class UsersEditModal extends React.Component {
                   id="role" 
                   value={this.state.input.role || ''}
                   onChange={this.handleInputChange} 
+                  valid={ this.state.roleState === 'has-success' }
+                  invalid={ this.state.roleState === 'has-error' }
                 >
-                    <option value="BASIC">Basic</option>
-                    <option value="ADVANCED">Advanced</option>
-                    <option value="GOLD">Gold</option>
+                { this.state.roles.map((role) => {
+                  return (
+                    <option value={role.name} key={role.name}>{role.name} ({role.max - (role.inUse || 0)})</option>
+                  );
+                })}
                 </Input>
+                <FormFeedback>
+                  No role available
+                </FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row className="pr-1">
               <Col md="3">
                 <Label htmlFor="isAdmin" className="pr-1">{ t('Is Admin')}:</Label>
               </Col>
-              <Col xs="12" md="9">
+              <Col xs={{size: 12, offset: 1}} md={{size: 8, offset: 1}}>
                 <Input 
                   type="checkbox" 
                   name="isAdmin" 
@@ -173,12 +204,15 @@ class UsersEditModal extends React.Component {
           </ModalBody>
           }
           <ModalFooter>
-            <Button color="primary" onClick={() => this.onClickUpdate()}>{ t('common:Change') }</Button>
+            <Button color="primary" disabled={this.state.isLoadingUpdate} onClick={() => this.onClickUpdate()}>{ t('common:Change') }{' '} 
+              { (this.state.isLoadingUpdate) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
             <Button color="secondary" onClick={this.toggle}>{ t('common:Cancel') }</Button>
             { (this.state.isActive) ? 
-            <Button color="danger" onClick={this.onClickDeactiviate}>{ t('common:Deactiviate') }</Button>
+            <Button color="danger" disabled={this.state.isLoadingDeactiviate} onClick={this.onClickDeactiviate}>{ t('common:Deactiviate') }{' '} 
+            { (this.state.isLoadingDeactiviate) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
             :
-            <Button color="danger" onClick={this.onClickActivate}>{ t('common:Activate') }</Button>
+            <Button color="danger" disabled={this.state.isLoadingActivate} onClick={this.onClickActivate}>{ t('common:Activate') }{' '} 
+            { (this.state.isLoadingActivate) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
             }
           </ModalFooter>
         </Modal>
@@ -203,6 +237,12 @@ const MeData = `query Me($userId: ID, $tenant: String, $limit: Int, $nextToken: 
           tenant {
             id
             name
+
+            tenantRoles {
+              name
+              inUse
+              max
+            }
 
             users(userId: $userId, limit: $limit, nextToken: $nextToken) {
               items {

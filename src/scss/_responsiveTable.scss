@@ -1,0 +1,135 @@
+// .responsiveTable {
+//     width: 100%;
+//   }
+  
+//   .responsiveTable td .tdBefore {
+//     display: none;
+//   }
+  
+//   @media screen and (max-width: 40em) {
+//     /*
+//       Force table elements to not behave like tables anymore
+//       Hide table headers (but not display: none;, for accessibility)
+//     */
+  
+//     .responsiveTable table,
+//     .responsiveTable thead,
+//     .responsiveTable tbody,
+//     .responsiveTable th,
+//     .responsiveTable td,
+//     .responsiveTable tr {
+//       display: block;
+//     }
+  
+//     .responsiveTable thead tr {
+//       position: absolute;
+//       top: -9999px;
+//       left: -9999px;
+//       border-bottom: 2px solid #333;
+//     }
+  
+//     .responsiveTable tbody tr {
+//       border: 1px solid #000;
+//       padding: .25em;
+//     }
+  
+//     .responsiveTable td.pivoted {
+//       /* Behave like a "row" */
+//       border: none !important;
+//       border-bottom: 1px solid #000;
+//       position: relative;
+//       padding-left: 50% !important;
+//       text-align: left !important;
+//     }
+  
+//     .responsiveTable td .tdBefore {
+//       /* Now like a table header */
+//       position: absolute;
+//       display: block;
+  
+//       /* Top/left values mimic padding */
+//       left: 1rem;
+//       width: 45%;
+//       padding-right: 10px;
+//       white-space: nowrap;
+//       text-align: left !important;
+//       font-weight: 600;
+//     }
+//   }
+
+	
+// /*  Custom stacked styles for mobile sizes */
+// /*  Use a max-width media query so we don't have to undo these styles */
+// @media (max-width: 40em) {
+//     /*  Negate the margin between sections */
+//     .responsiveTable tbody th {
+//         margin-top: 0;
+//         text-align: left;
+//     }
+//     /*  White bg, large blue text for rank and title */
+//     .responsiveTable tbody th,
+//     .responsiveTable tbody td.title {
+//         display: block;
+//         font-size: 1.2em;
+//         line-height: 110%;
+//         padding: .5em .5em;
+//         background-color: #fff;
+//         color: #77bbff;
+//         -moz-box-shadow: 0 1px 6px rgba(0,0,0,.1);
+//         -webkit-box-shadow: 0 1px 6px rgba(0,0,0,.1);
+//         box-shadow: 0 1px 6px rgba(0,0,0,.1);
+//     }
+//     /*  Hide labels for rank and title */
+//     .responsiveTable tbody th .ui-table-cell-label,
+//     .responsiveTable tbody td.title .ui-table-cell-label {
+//         display: none;
+//     }
+//     /*  Position the title next to the rank, pad to the left */
+//     .responsiveTable tbody td.title {
+//         margin-top: -2.1em;
+//         padding-left: 2.2em;
+//         border-bottom: 1px solid rgba(0,0,0,.15);
+//     }
+//     /*  Make the data bold */
+//     .responsiveTable th,
+//     .responsiveTable td {
+//         font-weight: bold;
+//     }
+//     /* Make the label elements a percentage width */
+//     .responsiveTable td .ui-table-cell-label,
+//     .responsiveTable th .ui-table-cell-label {
+//         min-width: 20%;
+//     }
+// }
+// /* Media query to show as a standard table at wider widths */
+// @media ( min-width: 40em ) {
+//     /* Show the table header rows */
+//     .responsiveTable td,
+//     .responsiveTable th,
+//     .responsiveTable tbody th,
+//     .responsiveTable tbody td,
+//     .responsiveTable thead td,
+//     .responsiveTable thead th {
+//         display: table-cell;
+//         margin: 0;
+//     }
+//     /* Hide the labels in each cell */
+//     .responsiveTable td .ui-table-cell-label,
+//     .responsiveTable th .ui-table-cell-label {
+//         display: none;
+//     }
+// }
+// /* Hack to make IE9 and WP7.5 treat cells like block level elements */
+// /* Applied in a max-width media query up to the table layout breakpoint so we don't need to negate this */
+// @media ( max-width: 40em ) {
+//     .responsiveTable td,
+//     .responsiveTable th {
+//         width: 100%;
+//         -webkit-box-sizing: border-box;
+//         -moz-box-sizing: border-box;
+//         box-sizing: border-box;
+//         float: left;
+//         clear: left;
+//     }
+// }
+

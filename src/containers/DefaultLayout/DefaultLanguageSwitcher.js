@@ -1,8 +1,10 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button } from 'reactstrap';
 import i18n from '../../i18n';
+import LanguageSelect from '../../components/LanguageSelect/LanguageSelect';
+import Log from '../../utils/Logger/Log';
 
 class DefaultLanguageSwitcher extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class DefaultLanguageSwitcher extends React.Component {
     };
 
     // this.toggle = this.toggle.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
 //   componentWillReceiveProps(nextProps) {
@@ -26,22 +29,36 @@ class DefaultLanguageSwitcher extends React.Component {
 //     });
 //   }
 
-  render() {
+handleInputChange(e) {
+  let input = [];
+  input[e.target.name] = e.target.value;
+  this.setState(input);
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    }
+  if (e.target.name === 'language') {
+    i18n.changeLanguage(e.target.value);
+  }
+  Log.info('Input changed ' + JSON.stringify(this.state), 'Profile.EditView');
+}
+
+  render() {
 
     return (
       <div>
         <Modal isOpen={this.props.showModal} toggle={this.props.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Change language</ModalHeader>
           <ModalBody>
-            Change language: <Button color="link" onClick={() => changeLanguage('de')}>de</Button> | <Button color="link" onClick={() => changeLanguage('en')}>en</Button>
+            <Row>
+              <Col>Change language:</Col>
+              <Col><LanguageSelect 
+                  name="language"
+                  value={this.state.language || ''}
+                  onChange={this.handleInputChange} 
+                  />
+              </Col>
+            </Row>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.props.toggle}>Do Something</Button>{' '}
-            <Button color="secondary" onClick={this.props.toggle}>Cancel</Button>
+            <Button onClick={this.props.toggle}>Close</Button>
           </ModalFooter>
         </Modal>
       </div>

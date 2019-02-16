@@ -25,6 +25,10 @@ class Log {
   trace(message, source) {
     return this.generateMessage('trace', message, source);
   }
+
+  debug(message, source) {
+    return this.generateMessage('debug', message, source);
+  }
   
   info(message, source) {
     return this.generateMessage('info', message, source);

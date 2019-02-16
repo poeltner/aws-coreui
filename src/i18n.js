@@ -2,10 +2,11 @@ import i18n from "i18next";
 import { reactI18nextModule } from "react-i18next";
 import detector from "i18next-browser-languagedetector";
 import backend from "i18next-xhr-backend";
+import moment from "moment";
 
 var detectionOptions ={
   // order and from where user language should be detected
-  order: ['navigator', 'cookie', 'localStorage', 'querystring', 'htmlTag'],
+  order: ['localStorage', 'navigator', 'cookie', 'querystring', 'htmlTag'],
 
   // keys or params to lookup language from
   lookupQuerystring: 'lng',
@@ -45,7 +46,12 @@ i18n
     },
     
     interpolation: {
-      escapeValue: false // react already safes from xss
+      escapeValue: false, // react already safes from xss
+      format: function(value, format) { // lng as an option possible: function(value, format, lng)
+          if (format === 'uppercase') return value.toUpperCase();
+          if(value instanceof Date) return moment(value).format(format);
+          return value;
+      }
     },
     
     // react-i18next options

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Label, Card, CardBody, CardFooter, CardHeader, Col, Button, Input, FormGroup } from 'reactstrap';
+import { Label, Card, CardBody, CardFooter, CardHeader, Col, Button, Input, FormGroup, FormFeedback } from 'reactstrap';
 import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types'
 import { API, graphqlOperation } from "aws-amplify";
@@ -10,7 +10,8 @@ class AdminSettingsView extends Component {constructor(props) {
 
     this.state = {
         tenant: this.props.match.params.tenant,
-        input: { }
+        validate: {},
+        isUpdating: false,
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,51 +27,65 @@ class AdminSettingsView extends Component {constructor(props) {
     if ((selfData.data.me.user.tenants !== null) 
       && (selfData.data.me.user.tenants[0].tenantId === this.state.tenant)) {
         this.setState({
-            input: selfData.data.me.user.tenants[0].tenant,
+            name: selfData.data.me.user.tenants[0].tenant.name,
+            description: selfData.data.me.user.tenants[0].tenant.description,
             isLoading: false
           })
     }
     this.setState({isLoading: false});
-    Log.info('Self loaded ' + JSON.stringify(this.state), 'Admin.BillingAddressModal');
+    Log.info('Self loaded ' + JSON.stringify(this.state), 'Admin.SettingsView');
   }
 
   async onClickUpdate() {
+    this.setState({isUpdating:true});
     const requestUpdate = {
-      name: this.state.input.name,
-      description: this.state.input.description,
+      name: this.state.name,
+      description: this.state.description,
     }
-    const tenant = await API.graphql(graphqlOperation(UpdateTenant, { tenantId: this.state.tenant, input: requestUpdate}));
+    const tenant = await API.graphql(graphqlOperation(UpdateTenant, { tenant: this.state.tenant, input: requestUpdate}));
     if (tenant.data)
-      this.props.alert("Updated")
+      this.props.alert(this.props.t('Settings updated'));
     else 
-      this.props.errorAlert("Error when updating, please try again later")
+      this.props.errorAlert(this.props.t('Error when updating, please try again later'));
+      this.setState({isUpdating:false});
   }
 
   async onClickCancel() {
     this.loadData();
-    this.props.alert("Data reloaded");
+    this.props.alert(this.props.t('Changes reseted'));
   }
 
-  handleInputChange(e) {
-    const input = this.state.input;
-    input[e.target.name] = e.target.value;
-    this.setState({input});
+  async handleInputChange(e) {
+    const { target } = e;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name } = target;
+    await this.setState({
+      [ name ]: value,
+    });
+  }
+  async validateMinCharacter(e, characters) {
+    const { validate } = this.state
+    if (e.target.value.length >= characters) {
+      validate[e.target.name] = 'has-success';
+    } else {
+      validate[e.target.name] = 'has-error';
+    }
+    this.setState({ validate })
   }
 
 
   render() {
     const { t } = this.props;
-    
 
     return (
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-font-awesome"></i> <b>Settings:</b> { this.state.tenant }
+            <i className="fa fa-cogs"></i> <b>{t('Settings for')} { this.state.tenant }</b> 
           </CardHeader>
           { this.state.isLoading ?
             <div className="animated fadeIn pt-3 text-center">
-              Loading...
+              { t('Loading ...') }
             </div>
             :
           <CardBody>
@@ -83,9 +98,17 @@ class AdminSettingsView extends Component {constructor(props) {
                   type="input" 
                   name="name" 
                   id="name" 
-                  value={this.state.input.name || ''} 
-                  onChange={this.handleInputChange} 
+                  value={this.state.name || ''} 
+                  onChange={(e) => {
+                    this.validateMinCharacter(e,3);
+                    this.handleInputChange(e);
+                  }}
+                  valid={ this.state.validate.name === 'has-success' }
+                  invalid={ this.state.validate.name === 'has-error' }
                 />
+                <FormFeedback>
+                  { t('Name need to have at least 3 characters')}
+                </FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row className="pr-1">
@@ -97,16 +120,25 @@ class AdminSettingsView extends Component {constructor(props) {
                   type="input" 
                   name="description" 
                   id="description" 
-                  value={this.state.input.description || '' }
-                  onChange={this.handleInputChange} 
+                  value={this.state.description || '' }
+                  onChange={(e) => {
+                    this.validateMinCharacter(e,3);
+                    this.handleInputChange(e);
+                  }}
+                  valid={ this.state.validate.description === 'has-success' }
+                  invalid={ this.state.validate.description === 'has-error' }
                 />
+                <FormFeedback>
+                  { t('Name need to have at least 3 characters')}
+                </FormFeedback>
               </Col>
             </FormGroup>
           </CardBody>
           }
           <CardFooter>
-            <Button color="primary" onClick={() => this.onClickUpdate()}>{ t('common:Change') }</Button>
-            <Button color="secondary" onClick={() => this.onClickCancel()}>{ t('common:Cancel') }</Button>
+            <Button className="float-right" color="secondary" onClick={() => this.onClickCancel()}>{ t('common:Cancel') }</Button>
+            <Button className="float-right" color="primary" onClick={() => this.onClickUpdate()}>{ t('common:Change') }{' '} 
+                  { (this.state.isUpdating) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
           </CardFooter>
         </Card>
       </div>
@@ -131,11 +163,6 @@ const MeData = `query Me($tenant: String) {
   me {
       userId
       user {
-        id
-        firstName
-        lastName
-        email
-
         tenants(tenant: $tenant) {
           tenantId
           tenant {
@@ -148,13 +175,10 @@ const MeData = `query Me($tenant: String) {
   }
 }`;
 
-const UpdateTenant = `mutation UpdateTenant($tenantId: ID!, $input: TenantInput!) {
-  updateTenant(tenantId: $tenantId, input: $input) {
+const UpdateTenant = `mutation UpdateTenant($tenant: ID!, $input: TenantInput!) {
+  updateTenant(tenant: $tenant, input: $input) {
     id
     name
     description
-    billingAddress {
-      company
-    }
   }
 }`

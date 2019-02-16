@@ -8,6 +8,7 @@ import { withNamespaces } from 'react-i18next';
 import DefaultLanguageSwitcher from './DefaultLanguageSwitcher';
 import Log from '../../utils/Logger/Log';
 import DefaultTenantSwitcher from './DefaultTenantSwitcher';
+import DefaultNewTenant from './DefaultNewTenant';
 
 
 const defaultProps = {};
@@ -26,6 +27,7 @@ class DefaultHeader extends Component {
     }
 
     this.tenantSwitcher = React.createRef();
+    this.newTenant = React.createRef();
 
     this.toggleLanguageSwitcher = this.toggleLanguageSwitcher.bind(this);
     this.toggleTenantSwitcher = this.toggleTenantSwitcher.bind(this);
@@ -47,11 +49,11 @@ class DefaultHeader extends Component {
   }
 
   toggleTenantSwitcher() {
-    // this.setState({
-    //   showTenantSwitcher: !this.state.showTenantSwitcher
-    // })
     this.tenantSwitcher.toggle();
-    // this.tenantSwitcher.current.setState({modal:true});
+  }
+
+  toggleNewTenant() {
+    this.newTenant.toggle();
   }
 
   onClickSettings(e) {
@@ -68,6 +70,8 @@ class DefaultHeader extends Component {
       <React.Fragment>
         <DefaultLanguageSwitcher showModal={this.state.showLanguageSwitcher} toggle={this.toggleLanguageSwitcher}/>
         <DefaultTenantSwitcher onRef={ref => (this.tenantSwitcher = ref)} />
+        <DefaultNewTenant onRef={ref => (this.newTenant = ref)} />
+      
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
           full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
@@ -90,7 +94,7 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>{ t('Tenants') }</strong></DropdownItem>
-              <DropdownItem><i className="fa fa-plus"></i> { t('Create tenant') }</DropdownItem>
+              <DropdownItem onClick={() => this.toggleNewTenant()}><i className="fa fa-plus"></i> { t('Create tenant') }</DropdownItem>
               <DropdownItem onClick={() => this.toggleTenantSwitcher()}><i className="fa fa-exchange"></i> { t('Switch tenant') }</DropdownItem>
               <DropdownItem header tag="div" className="text-center"><strong>{ t('Profile') }</strong></DropdownItem>
               <DropdownItem onClick={e => this.onClickSettings(e)}><i className="fa fa-wrench"></i> { t('common:Settings') }</DropdownItem>

@@ -77,7 +77,7 @@ class DefaultTenantSwitcher extends React.Component {
     }
 
     const MakeSelectOptions = function(option) {
-        return <option value={option.tenant.id}>{option.tenant.name}</option>;
+        return <option value={option.tenant.id} key={option.tenant.id}>{option.tenant.name}</option>;
     };
 
     const { t } = this.props;

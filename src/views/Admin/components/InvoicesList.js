@@ -3,15 +3,15 @@ import { Button, Row, Col } from "reactstrap";
 import { Connect } from "aws-amplify-react";
 import { graphqlOperation } from "aws-amplify";
 import BootstrapTable from 'react-bootstrap-table-next';
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+// import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import {Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Log from "../../../utils/Logger/Log";
-import UsersEditModal from "../modals/users.edit.modal";
+// import UsersEditModal from "../modals/users.edit.modal";
 
 let limit = 10;
 
-class AdminsList extends React.Component{
+class InvoicesList extends React.Component{
 
     constructor(props) {
         super(props);
@@ -55,14 +55,8 @@ class AdminsList extends React.Component{
             );
         }
 
-        const selectRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            clickToEdit: true
-          };
         return (
         <div>
-          <UsersEditModal tenant={this.props.tenant} onRef={ref => (this.usersEditModal = ref)} />
           <Connect query={this.state.query}>
             {({ loading, error, data }) => {
                 if (loading) {
@@ -77,10 +71,10 @@ class AdminsList extends React.Component{
                 let nextToken = null;
                 // console.log("data " + JSON.stringify(data,2,2))
                 if ((data) && (data.me)) {
-                    items = data.me.user.tenants[0].tenant.users.items;
+                    items = data.me.user.tenants[0].tenant.invoices.items;
                     
                     // console.log("data1: " + JSON.stringify(items,2,2))
-                    if (data.me.user.tenants[0].tenant.users.nextToken != null) {
+                    if (data.me.user.tenants[0].tenant.invoices.nextToken != null) {
                         // console.log("nextoken exists ")
                         nextToken = data[this.props.tableConfig.qlmethod].data.nextToken;
                     }
@@ -89,21 +83,11 @@ class AdminsList extends React.Component{
 
                     return (
                     <div>
-                        <Row>
-                            <Col>
-                            { data.me.user.tenants[0].tenant.tenantRoles.map((role) =>
-                            <li key={role.name.toString()}>
-                                {role.name}: {role.inUse} ( {role.max} )
-                            </li>
-                            )
-                            }
-                            </Col>
-                        </Row>
                          <Row>
                             <Col xs={12}>
                                 <BootstrapTable 
                                     bootstrap4
-                                    keyField='userId' 
+                                    keyField='invoiceId' 
                                     classes='hover bordered striped responsive' 
                                     data={ items || [] } 
                                     columns={ this.props.tableConfig.columns } 
@@ -142,10 +126,10 @@ class AdminsList extends React.Component{
     }
 }
 
-AdminsList.propTypes = {
+InvoicesList.propTypes = {
   query: PropTypes.string,
   tableConfig: PropTypes.any,
   tenant: PropTypes.string
 }
 
-export default AdminsList;
+export default InvoicesList;

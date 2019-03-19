@@ -1,0 +1,6 @@
+{
+  "name": "DefaultConfirmSignUp",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ConfirmSignUp.js"
+}

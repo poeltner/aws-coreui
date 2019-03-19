@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
-
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
-const propTypes = {
-  children: PropTypes.node,
-};
 
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+
   render() {
 
     // eslint-disable-next-line
@@ -32,7 +30,7 @@ class DefaultHeader extends Component {
             <NavLink href="/">Dashboard</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            <NavLink href="#/users">Users</NavLink>
+            <Link to="/users">Users</Link>
           </NavItem>
           <NavItem className="px-3">
             <NavLink href="#">Settings</NavLink>
@@ -50,7 +48,7 @@ class DefaultHeader extends Component {
           </NavItem>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
@@ -65,7 +63,7 @@ class DefaultHeader extends Component {
               <DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>
               <DropdownItem divider />
               <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-              <DropdownItem><i className="fa fa-lock"></i> Logout</DropdownItem>
+              <DropdownItem onClick={e => this.props.onLogout(e)}><i className="fa fa-lock"></i> Logout</DropdownItem>
             </DropdownMenu>
           </AppHeaderDropdown>
         </Nav>
@@ -76,7 +74,11 @@ class DefaultHeader extends Component {
   }
 }
 
-DefaultHeader.propTypes = propTypes;
+DefaultHeader.propTypes = {
+  children: PropTypes.node,
+  onLogout: PropTypes.func
+};
+
 DefaultHeader.defaultProps = defaultProps;
 
 export default DefaultHeader;

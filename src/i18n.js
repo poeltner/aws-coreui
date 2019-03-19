@@ -3,12 +3,35 @@ import { reactI18nextModule } from "react-i18next";
 import detector from "i18next-browser-languagedetector";
 import backend from "i18next-xhr-backend";
 
+var detectionOptions ={
+  // order and from where user language should be detected
+  order: ['navigator', 'cookie', 'localStorage', 'querystring', 'htmlTag'],
+
+  // keys or params to lookup language from
+  lookupQuerystring: 'lng',
+  lookupCookie: 'i18next',
+  lookupLocalStorage: 'i18nextLng',
+
+  // cache user language on
+  caches: ['localStorage', 'cookie'],
+  excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
+
+  // optional expire and domain for set cookie
+  // cookieMinutes: 10,
+  // cookieDomain: 'myDomain',
+
+  // optional htmlTag with lang attribute, the default is:
+  htmlTag: document.documentElement
+}
+
+
 i18n
   .use(detector)
   .use(backend)
   .use(reactI18nextModule) // passes i18n down to react-i18next
   .init({
-    lng: "en",
+    // lng: "en",
+    detection: detectionOptions,
     fallbackLng: "en", // use en if detected lng is not available
 
     ns: ['validation', 'common', 'glossary'],

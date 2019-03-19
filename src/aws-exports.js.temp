@@ -1,0 +1,14 @@
+const awsexport = {
+    Auth: {
+    // REQUIRED - Amazon Cognito Identity Pool ID
+        identityPoolId: '', 
+    // REQUIRED - Amazon Cognito Region
+        region: 'eu-central-1', 
+    // OPTIONAL - Amazon Cognito User Pool ID
+        userPoolId: '',
+    // OPTIONAL - Amazon Cognito Web Client ID
+        userPoolWebClientId: '', 
+    }, 
+}
+
+export default awsexport;

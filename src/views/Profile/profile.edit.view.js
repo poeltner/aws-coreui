@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Nav, NavItem, NavLink,
+  CardFooter, Row, Col, Button,
   TabContent, TabPane } from 'reactstrap';
 import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types';

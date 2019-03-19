@@ -71,49 +71,16 @@ class SettingsPane extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup row className="pr-1">
-              <Col md="3">
-                <Label htmlFor="timeZone" className="pr-1">{ t('NewPassword')}:</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input 
-                  type="text"
-                  name="timeZone"
-                  id="timeZone"
-                  value={this.state.timeZone}
-                  onChange={this.handleInputChange} 
-                />
-              </Col>
-            </FormGroup>
             <Row>
-              <Col>
-                <Button onClick={() => this.onSubmit() }> Change Password </Button>
+              <Col><hr />
               </Col>
             </Row>
             <Row>
               <Col>
-                <hr />
+                <Button className="float-right" onClick={() => this.onSubmit() } color="primary"> Submit {' '} 
+                  { (this.state.isUpdating) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <h5><strong>{ t('LinkedAccounts')}</strong></h5><br/>
-              </Col>
-            </Row>
-            <FormGroup row className="pr-1">
-              <Col md="3">
-                <Label htmlFor="email" className="pr-1">{ t('common:Email')}:</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input
-                  type="text"
-                  name="email"
-                  id="select"
-                  value={this.state.email}
-                  onChange={this.handleInputChange} 
-                />
-              </Col>
-            </FormGroup>
       </div>
     );
   }

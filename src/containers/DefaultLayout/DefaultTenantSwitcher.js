@@ -77,6 +77,7 @@ class DefaultTenantSwitcher extends React.Component {
     }
 
     const MakeSelectOptions = function(option) {
+        if (option.tenant == null ) return;
         return <option value={option.tenant.id} key={option.tenant.id}>{option.tenant.name}</option>;
     };
 
@@ -85,7 +86,7 @@ class DefaultTenantSwitcher extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+        <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}><strong>{ t('Switch tenant') }</strong></ModalHeader>
           { this.state.isLoading ?
             <div className="animated fadeIn pt-3 text-center">Loading...</div>

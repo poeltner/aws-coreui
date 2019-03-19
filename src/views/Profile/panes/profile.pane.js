@@ -37,6 +37,7 @@ class ProfilePane extends Component {
     if (this.state.timeZone !== null) user.timeZone = this.state.timeZone;
     if (this.state.country !== null) user.country = this.state.country;
     if (this.state.language !== null) user.language = this.state.language;
+    this.setState({ isUpdating: true });
 
     const meData = await API.graphql(graphqlOperation(
       UpdateMe,
@@ -46,6 +47,7 @@ class ProfilePane extends Component {
       },
     ));
     Log.info("Submit response: " + JSON.stringify(meData), "Profile.EditView");
+    this.setState({ isUpdating: false });
   }
   
   handleInputChange(e) {
@@ -64,7 +66,7 @@ class ProfilePane extends Component {
     
 
     return (
-      <div className="animated fadeIn">
+      <div className="animated fadeIn" data-test="component-app">
         <CardBody>
             <FormGroup row className="pr-1">
               <Col md="3">
@@ -164,37 +166,18 @@ class ProfilePane extends Component {
                   />
               </Col>
             </FormGroup>
-        </CardBody>
-        <CardFooter>
             <Row>
-              <Col>
-                <Button className="float-right" onClick={() => this.onSubmit() } color="primary"> Submit </Button>
+              <Col><hr />
               </Col>
             </Row>
-        </CardFooter>
-        <CardBody>
             <Row>
               <Col>
-                <br/>
-                <h5><strong>{ t('common:EmailSettings')}</strong></h5><br/>
+                <Button className="float-right" onClick={() => this.onSubmit() } color="primary"> Submit {' '} 
+                  { (this.state.isUpdating) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
               </Col>
             </Row>
-            <FormGroup row className="pr-1">
-              <Col md="3">
-                <Label htmlFor="email" className="pr-1">{ t('common:Email')}:</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input
-                  type="text"
-                  name="email"
-                  id="select"
-                  value={this.state.email || ''}
-                  onChange={this.handleInputChange} 
-                />
-              </Col>
-            </FormGroup>
         </CardBody>
-      </div>
+      </div> 
     );
   }
 }

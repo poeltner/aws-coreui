@@ -174,6 +174,11 @@ class SecurityPane extends Component {
 
     return (
       <div className="animated fadeIn">
+            <Row>
+              <Col>
+                <h5><strong>{ t('Change Password')}</strong></h5><br/>
+              </Col>
+            </Row>
             <FormGroup row className="pr-1">
               <Col md="3">
                 <Label htmlFor="currentPassword" className="pr-1">{ t('CurrentPassword')}:</Label>
@@ -204,12 +209,61 @@ class SecurityPane extends Component {
             </FormGroup>
             <Row>
               <Col>
-                <Button onClick={() => this.onSubmitChangePassword() }> Change Password </Button>
+                <hr />
               </Col>
             </Row>
             <Row>
               <Col>
+                <Button className="float-right" onClick={() => this.onSubmitChangePassword() } color="primary"> Change Password </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                &nbsp;
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                &nbsp;
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <h5><strong>{ t('Change Email')}</strong></h5><br/>
+              </Col>
+            </Row>
+            <FormGroup row className="pr-1">
+              <Col md="3">
+                <Label htmlFor="email" className="pr-1">{ t('common:Email')}:</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input
+                  type="text"
+                  name="email"
+                  id="select"
+                  value={this.state.email}
+                  onChange={this.handleInputChange} 
+                />
+              </Col>
+            </FormGroup>
+            <Row>
+              <Col>
                 <hr />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Button className="float-right" onClick={() => this.onSubmitChangePassword() } color="primary"> Change Password </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                &nbsp;
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                &nbsp;
               </Col>
             </Row>
             <Row>
@@ -219,14 +273,14 @@ class SecurityPane extends Component {
             </Row>
             <Row className="pr-1">
               <Col md="3">
-                <Label htmlFor="email" className="pr-1">{ t('common:Email')}:</Label>
+                <Label htmlFor="email" className="pr-1">{ t('common:Facebook')}:</Label>
               </Col>
               <Col xs="12" md="9">
                 { (this.state['graph.facebook.com']) ? 
-                  <Button onClick={() => this.onUnlinkFacebook(this.state['graph.facebook.com']) } color="warning"> Unlink Facebook{' '} 
+                  <Button size="sm" onClick={() => this.onUnlinkFacebook(this.state['graph.facebook.com']) } color="warning"> Unlink Facebook{' '} 
                   { (this.state.isFacebookloading) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                 :
-                  <Button onClick={() => this.onLinkFacebook() } color="primary"> Link Facebook{' '} 
+                  <Button size="sm" onClick={() => this.onLinkFacebook() } color="primary"> Link Facebook{' '} 
                   { (this.state.isFacebookloading) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                 }
               </Col>

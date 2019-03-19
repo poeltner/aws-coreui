@@ -10,6 +10,9 @@ class DefaultSignIn extends SignIn {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isLoggingIn: false,
+    }
     this.onSignIn = this.onSignIn.bind(this);
   }
 
@@ -35,13 +38,15 @@ class DefaultSignIn extends SignIn {
     this.notify.notificationAlert(options);
   }
 
-  onSignIn() {
+  async onSignIn() {
     if (!this.inputs.username) {
       this.error("Username cannot be empty");
     } else if (!this.inputs.password) {
       this.error("Password cannot be empty");
     } else {
-      this.signIn();
+      this.setState({isLoggingIn: true});
+      await this.signIn();
+      this.setState({isLoggingIn: false});
     }
   }
   
@@ -95,7 +100,8 @@ class DefaultSignIn extends SignIn {
                           <Button color="link" className="px-0" onClick={() => this.changeState('forgotPassword')}>{ t('Forgot password?') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="primary" className="px-4" onClick={this.onSignIn}>{ t('common:Login') }</Button>
+                          <Button color="primary" className="px-4" onClick={this.onSignIn}>{ t('common:Login') }{' '} 
+                        { (this.state.isLoggingIn) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                           
                         </Col>
                       </Row>

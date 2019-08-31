@@ -1,5 +1,171 @@
 ## [CoreUI](https://coreui.io/) for [react](./REACT.md) changelog
 
+##### `v2.6.0`
+- move to `reactstrap v8`. Breaking changes and deprecations, see: https://github.com/reactstrap/reactstrap/blob/master/CHANGELOG.md#800-2019-04-03
+- fix(DefaultHeader): replace `AppHeaderDropdown` with `UncontrolledDropdown`
+- refactor: add ie polyfills 
+
+###### dependencies update
+- update: `@coreui/coreui` to `^2.1.12`
+- update: `@coreui/coreui-plugin-chartjs-custom-tooltips` to `^1.3.1`
+- update: `@coreui/react` to `^2.5.1`
+- update: `core-js` to `^3.1.4`
+- update: `enzyme` to `^3.10.0`
+- update: `enzyme-adapter-react-16` to `^1.14.0`
+- update: `react-router-config` to `^5.0.1`
+- update: `react-router-dom` to `^5.0.1`
+- update: `reactstrap` to `^8.0.0`
+
+##### `v2.5.0`
+- release for use with:
+  - react-router-dom `~5.0.0`
+  - @coreui/react `~2.5.0`
+
+###### dependencies update
+- update: `@coreui/react` to `~2.5.0`
+- update: `react-router-config` to `^5.0.0`
+- update: `react-router-dom` to `^5.0.0`
+
+It turns out this is not such a breaking change, as it seemed at a glance.
+Just update dependencies and you're good.
+
+#### _migration guide v2.1 -> v2.5_ :boom:
+- update `dependencies` in `package.json`  
+   - [ ] `@coreui/react` to `~2.5.0`
+   - [ ] `react-router-dom` to `^5.0.0`   
+   - [ ] `react-router-config` to `^5.0.0`
+
+<del>
+__BREAKING CHANGES__  :boom: 
+- use React Router `v5`
+- drop 'Breadcrumb' in favour of `Breadcrumb2`
+- drop 'SidebarNav' in favour of `SidebarNav2`
+- __Breadcrumb2__: **mandatory** prop `router` 💥 see > [Breadcrumb](./src/Breadcrumb.md)
+- __SidebarNav2__: **mandatory** prop `router` 💥 see > [SidebarNav](./src/SidebarNav.md) 
+
+React Router v5 uses the new React Context API, which is incompatible with version used in 4.3.
+That's a breaking change. With a raw upgrade to v5, you can encounter an error message: `You should not render a <Route> outside a <Router>` or `You should not use <Link> outside a <Router>` etc... It means that Route, Link etc, can't find the correct context object because `Breadcrumb` and `SidebarNav` components have their own context object.
+ 
+It's important to use the same instance of the `react-router-dom v5` library with template and coreui components. `@coreui/react` version `2.5.0` moves react-router-dom form dependencies to peerDependecies and takes the same library/module from the template/app instead. We have to pass `router` module object as a prop to `<AppSidebarNav>` and `<AppBreadcrumb>`      
+
+#### _migration guide v2.1 -> v2.5_ :boom:
+1. update `dependencies` in `package.json`    
+   - [ ] `@coreui/react` to `~2.5.0`
+   - [ ] `react-router-dom` to `^5.0.0`   
+   - [ ] `react-router-config` to `^5.0.0`
+
+2. modify `DefaultLayout.js`
+   - [ ] import react-router-dom module as an object   
+     ```
+     import * as router from 'react-router-dom';
+     ```
+   - [ ] import new versions of components `AppBreadcrumb2` and `AppSidebarNav2` (alias is optional, just keep consistency with markup)
+     ```jsx
+     import {
+       ... 
+       AppBreadcrumb2 as AppBreadcrumb,
+       AppSidebarNav2 as AppSidebarNav
+       ...
+     } from '@coreui/react';
+     ```
+   - [ ] inject `router` object as a prop to `<AppSidebarNav>` and `<AppBreadcrumb>`
+     ```html
+     <AppSidebarNav navConfig={navigation} {...this.props} router={router}/>  
+     ```  
+    
+     ```html
+     <AppBreadcrumb appRoutes={routes} router={router}/>
+     ```
+</del>
+---
+
+##### `v2.1.7`
+- maintenance release for use with:
+  - react-router `v4.3.x`
+  - reactstrap `v7.x`
+  - @coreui/react `~2.1.7`
+- chore: add `package-lock.json` with updated `tar` dependency  
+- chore: fix `test:cov` script
+- fix(Popovers): add `trigger="legacy" delay={0}` (breaking change in reactstrap) 
+###### dependencies update
+- update: `@coreui/react` to `~2.1.7`
+- update: `@coreui/coreui-plugin-chartjs-custom-tooltips` to `^1.3.0`
+- update: `enzyme-adapter-react-16` to `^1.13.0`
+- update: `node-sass` to `^4.12.0`
+- update: `react` to `^16.8.6`
+- update: `react-app-polyfill` to `^1.0.1`
+- update: `react-chartjs-2` to `^2.7.6`
+- update: `react-dom` to `^16.8.6`
+- update: `react-test-renderer` to `^16.8.6`
+- update: `react-scripts` to `^3.0.1`
+
+##### `v2.1.6`
+- fix(App): remove redundant react-loadable - thanks @sergeyt
+- fix(routes) remove circular dependency - thanks @sergeyt
+- refactor(App): change to render in Route
+- fix(routes): add Home to routes - breadcrumb issue
+- refactor(DefaultHeader): move to ReactRouter `NavLink`
+- refactor(Forms): move to `InputGroupButtonDropdown` where applicable 
+
+###### dependencies update
+- update: `@coreui/coreui` to `^2.1.9`
+- update: `@coreui/react` to `~2.1.5`
+- update: `chart.js` to `^2.8.0`
+- update: `enzyme-adapter-react-16` to `^1.11.2`
+- update: `react` to `^16.8.5`
+- update: `react-app-polyfill` to `^0.2.2`
+- update: `react-dom` to `^16.8.5`
+- update: `react-router-config` to `^4.4.0-beta.8`
+- update: `react-router-dom` to `~4.3.1`
+- update: `react-test-renderer` to `^16.8.5`
+- update: `react-scripts` to `^2.1.8`
+
+##### `v2.1.5`
+- fix: iOS 9 Safari sidebar toggle force issue `@coreui/react@2.1.5`
+
+###### dependencies update
+- update: `@coreui/react` to `^2.1.5`
+- update: `enzyme-adapter-react-16` to `^1.10.0`
+- update: `flag-icon-css` to `^3.3.0`
+- update: `react` to `^16.8.4`
+- update: `react-dom` to `^16.8.4`
+- update: `react-test-renderer` to `^16.8.4`
+
+##### `v2.1.4`
+- maintenance release: fixes #151 #145   
+###### dependencies update
+- update: `@coreui/coreui` to `^2.1.7`
+- update: `@coreui/react` to `^2.1.4`
+- update: `bootstrap` to `^4.3.1`
+- update: `core-js` to `^2.6.5`
+- update: `enzyme` to `^3.9.0`
+- update: `enzyme-adapter-react-16` to `^1.9.1`
+- update: `prop-types` to `^15.7.2`
+- update: `react` to `^16.8.2`
+- update: `react-app-polyfill` to `^0.2.1`
+- update: `react-dom` to `^16.8.2`
+- update: `react-test-renderer` to `^16.8.2`
+- update: `reactstrap` to `^7.1.0`
+- update: `react-scripts` to `2.1.5`
+
+##### `v2.1.3`
+- fix(Collapse): add `mb-0` to accordion cards
+- fix(ButtonGroups): misplaced dropdownOpen
+- chore: update `@coreui/coreui` to `^2.1.5`
+- chore: update `@coreui/react` to `^2.1.3`
+- chore: update `bootstrap` to `^4.2.1`
+- chore: update `core-js` to `^2.6.1`
+- chore: update `enzyme` to `^3.8.0`
+- chore: update `enzyme-adapter-react-16` to `^1.7.1`
+- chore: update `node-sass` to `^4.11.0`
+- chore: update `react` to `^16.7.0`
+- chore: update `react-app-polyfill` to `^0.2.0`
+- chore: update `react-chartjs-2` to `^2.7.4`
+- chore: update `react-dom` to `^16.7.0`
+- chore: update `react-test-renderer` to `^16.7.0`
+- chore: update `reactstrap` to `^7.0.2`
+- chore: update `react-scripts` to `2.1.3`
+
 ##### `v2.1.2`
 - fix(scss): floating footer ie11 issue
 - chore: update `@coreui/react` to `^2.1.1`
@@ -24,21 +190,23 @@
   - starting with `@coreui/coreui`, `@coreui/react` version `2.1.0` and up
   - closes #106 
   - item example(`./src/_nav.js`):
-      ```js
-      {
-        name: 'Disabled',
-        url: '/disabled',
-        icon: 'icon-ban',
-        attributes: { disabled: true },
-      },
-      {
-        name: 'Try CoreUI PRO',
-        url: 'https://coreui.io/pro/react/',
-        icon: 'cui-layers icons',
-        variant: 'danger',
-        attributes: { target: '_blank', rel: "noopener" },
-      },
-      ```
+  ```js
+  [
+    {
+      name: 'Disabled',
+      url: '/disabled',
+      icon: 'icon-ban',
+      attributes: { disabled: true },
+    },
+    {
+      name: 'Try CoreUI PRO',
+      url: 'https://coreui.io/pro/react/',
+      icon: 'cui-layers icons',
+      variant: 'danger',
+      attributes: { target: '_blank', rel: "noopener" },
+    }
+  ]
+  ```
 - fix(Cards): `card-header-actions` added to `CardHeader` for `rtl` support
 - feat(Dashboard): new `Suspense` example with Widget03
 - chore: update `@coreui/coreui` to `2.1.0`

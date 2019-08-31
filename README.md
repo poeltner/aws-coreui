@@ -53,8 +53,7 @@ Within the download you'll find the following directories and files, logically g
 ```
 ├── public/          #static files
 │   ├── assets/      #assets
-│   └── index.html   #html temlpate
-│   └── locales      #locales translation files
+│   └── index.html   #html template
 │
 ├── src/             #project root
 │   ├── containers/  #container source

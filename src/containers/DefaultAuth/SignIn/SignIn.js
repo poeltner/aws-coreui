@@ -14,6 +14,7 @@ class DefaultSignIn extends SignIn {
       isLoggingIn: false,
     }
     this.onSignIn = this.onSignIn.bind(this);
+    this.changeState = this.changeState.bind(this);
   }
 
   error(err) {

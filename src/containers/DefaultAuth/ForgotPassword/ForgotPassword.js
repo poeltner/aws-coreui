@@ -8,7 +8,12 @@ import Log from '../../../utils/Logger/Log';
 class DefaultForgotPassword  extends ForgotPassword  {
   constructor(props) {
     super(props);
+    this.state = {
+      isRequestingPassword: false,
+      isSubmittingPassword: false
+    }
     this.onSubmit = this.onSubmit.bind(this);
+    this.onRequestPassword = this.onRequestPassword.bind(this);
   }
 
   error(err) {
@@ -33,15 +38,16 @@ class DefaultForgotPassword  extends ForgotPassword  {
     this.refs.notify.notificationAlert(options);
   }
 
-  onSubmit() {
-    const { t } = this.props;
-    if (this.inputs.password === this.inputs.repeatpassword) {
-      this.inputs.email = this.inputs.username;
-      this.submit();
-    } else {
-      console.log("Passwords do not match");
-      this.error({message:t('Passwords do not match')});
-    }
+  async onSubmit() {
+    this.setState({ isSubmittingPassword : true });
+    await this.submit();
+    this.setState({ isSubmittingPassword : false });
+  }
+  
+  async onRequestPassword() {
+    this.setState({ isRequestingPassword : true });
+    await this.send();
+    this.setState({ isRequestingPassword : false });
   }
 
   sendView() {
@@ -96,19 +102,6 @@ class DefaultForgotPassword  extends ForgotPassword  {
                     name="password"
                     onChange={this.handleInputChange} />
               </InputGroup>
-              <InputGroup className="mb-4">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="icon-lock"></i>
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input 
-                    placeholder={ t('common:RepeatPassword') }
-                    key="repeatpassword"
-                    type="password"
-                    name="repeatpassword"
-                    onChange={this.handleInputChange} />
-              </InputGroup>
           </div>
       );
   }
@@ -141,8 +134,10 @@ class DefaultForgotPassword  extends ForgotPassword  {
                         </Col>
                         <Col xs="6" className="text-right">
                           { this.state.delivery ? 
-                              <Button color="primary" className="px-4" onClick={this.onSubmit}>{ t('common:Submit') }</Button> :
-                              <Button color="primary" className="px-4" onClick={this.send}>{ t('Send Code') }</Button>
+                              <Button color="primary" className="px-4" onClick={this.onSubmit}>{ t('common:Submit') }{' '} 
+                              { (this.state.isSubmittingPassword) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button> :
+                              <Button color="primary" className="px-4" onClick={this.onRequestPassword}>{ t('Request') }{' '} 
+                              { (this.state.isRequestingPassword) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                           }  
                         </Col>
                       </Row>

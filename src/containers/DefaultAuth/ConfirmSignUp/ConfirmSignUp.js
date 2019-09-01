@@ -6,6 +6,15 @@ import { withNamespaces } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
 class DefaultConfirmSignUp  extends ConfirmSignUp  {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isconfirming: false
+    }
+    this.onClickResend = this.onClickResend.bind(this);
+    this.onClickConfirm = this.onClickConfirm.bind(this);
+  }
+
   error(err) {
     const { t } = this.props;
     Log.error(err, 'DefaultAuth.ConfirmSignUp');
@@ -28,12 +37,53 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
     this.notify.notificationAlert(options);
   }
 
+  async onClickResend() {
+   
+    await this.resend();
+    const options = {
+      place: 'tl',
+      message: (
+          <div>
+              <div>
+                  Code requested.
+              </div>
+          </div> 
+      ),
+      type: "info",
+      icon: "now-ui-icons ui-1_bell-53",
+      autoDismiss: 7
+    };
+    this.notify.notificationAlert(options);
+  }
+
+  async onClickConfirm() {
+    this.setState({ isconfirming: false });
+    await this.confirm();
+    this.setState({ isconfirming: true });
+    const options = {
+      place: 'tl',
+      message: (
+          <div>
+              <div>
+                  Account bestätigt
+              </div>
+          </div> 
+      ),
+      type: "info",
+      icon: "now-ui-icons ui-1_bell-53",
+      autoDismiss: 7
+    };
+    this.notify.notificationAlert(options);
+  }
+
   render() {
     const { t } = this.props;
     const { authState } = this.props;
     if (authState !== 'confirmSignUp') {
       return null;
     }
+
+    const username = this.usernameFromAuthData();
 
     return (
       <div className="app flex-row align-items-center">
@@ -57,9 +107,9 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                           placeholder={ t('common:Email') }
                           key="username"
                           name="username"
+                          disabled={username}
+                          value={username ? username : ""}
                           onChange={this.handleInputChange}
-                          
-                          
                         />
                       </InputGroup>
                       <InputGroup className="mb-4">
@@ -76,7 +126,11 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                             autoComplete="off"
                             onChange={this.handleInputChange}
                         />
-                        <InputGroupAddon addonType="append"><Button color="primary" className="px-0" onClick={this.resend}>{ t('Resend Code') }</Button></InputGroupAddon>
+                        <InputGroupAddon addonType="append">
+                          <Button color="primary" className="px-0" onClick={this.onClickResend}>
+                            { t('Resend Code') }
+                          </Button>
+                        </InputGroupAddon>
                         
                       </InputGroup>
                       <Row>
@@ -84,7 +138,8 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
                           <Button color="link" className="px-0"  onClick={() => this.changeState('signIn')}>{ t('Back to Sign In') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="primary" className="px-4" onClick={this.confirm}>{ t('common:Confirm') }</Button>
+                          <Button color="primary" className="px-4" onClick={this.onClickConfirm}>{ t('common:Confirm') }{' '} 
+                            { (this.state.isconfirming) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                         </Col>
                       </Row>
                     </Form>

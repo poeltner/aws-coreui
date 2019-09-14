@@ -133,4 +133,4 @@ class DefaultSignIn extends SignIn {
 }
 
 // export default DefaultSignIn;
-export default withNamespaces('auth') (DefaultSignIn);
+export default withNamespaces('auth', { wait: true }) (DefaultSignIn);

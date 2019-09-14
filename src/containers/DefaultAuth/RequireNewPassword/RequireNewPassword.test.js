@@ -1,10 +1,24 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 import DefaultRequireNewPassword from './RequireNewPassword';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<DefaultRequireNewPassword />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('RequireNewPassword', () => {
+  describe('normal case', () => {
+    test('render correctly', () => {
+      const wrapper = shallow(<DefaultRequireNewPassword />);
+
+      wrapper.setProps({
+          authState: 'requireNewPassword',
+          authData: {
+              challengeParam: {
+                  requiredAttributes: []
+              }
+          },
+          hide: false
+      });
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
 });

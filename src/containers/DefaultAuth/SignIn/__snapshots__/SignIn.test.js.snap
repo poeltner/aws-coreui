@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignIn normal case render correctly with Props signIn, signedOut or signedUp 1`] = `ShallowWrapper {}`;
+
+exports[`SignIn normal case render correctly with Props signIn, signedOut or signedUp 2`] = `ShallowWrapper {}`;
+
+exports[`SignIn normal case render correctly with Props signIn, signedOut or signedUp 3`] = `ShallowWrapper {}`;
+
+exports[`SignIn normal case render correctly with Props signIn, signedOut or signedUp 4`] = `ShallowWrapper {}`;

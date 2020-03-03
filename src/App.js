@@ -43,11 +43,15 @@ class App extends Component {
   }
 }
 
+const signUpConfig = {
+  hiddenDefaults: ['phone_number'],
+};
+
 export default withAuthenticator(App, false, [
   <DefaultSignIn federated={aws_exports.federated}/>,
   <DefaultConfirmSignIn/>,
   <VerifyContact/>,
-  <DefaultSignUp federated={aws_exports.federated}/>,
+  <DefaultSignUp federated={aws_exports.federated} signUpConfig={signUpConfig} />,
   <DefaultConfirmSignUp/>,
   <DefaultForgotPassword/>,
   <DefaultRequireNewPassword/>

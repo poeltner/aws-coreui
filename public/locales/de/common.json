@@ -1,12 +1,13 @@
 {
-    "Register": "Registrieren",
-    "Login":"Einloggen",
-    "Logout":"Ausloggen",
-    "Email":"Email",
-    "Password":"Passwort",
-    "RepeadPassword":"Passwort wiederholen",
-    "Submit": "Senden",
-    "Confirm": "Bestätigen",
-    "Change":"Ändern",
-    "Settings":"Einstellungen"
+  "Register": "Registrieren",
+  "Login": "Einloggen",
+  "Logout": "Ausloggen",
+  "Email": "Email",
+  "Password": "Passwort",
+  "ConfirmPassword": "Passwort bestätigen",
+  "RepeadPassword": "Passwort wiederholen",
+  "Submit": "Senden",
+  "Confirm": "Bestätigen",
+  "Change": "Ändern",
+  "Settings": "Einstellungen"
 }

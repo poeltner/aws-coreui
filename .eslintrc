@@ -13,7 +13,7 @@
     "plugins": [
         "react"
     ],
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb" ],
     "rules": {
         "comma-dangle": 0
     },
@@ -26,6 +26,13 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "node": true
+        "node": true,
+        "jest": true,
+        "es6": true
+    },
+    "globals": {
+        "shallow": true,
+        "render": true,
+        "mount": true
     }
 }

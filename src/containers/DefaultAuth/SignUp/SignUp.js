@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardFooter, Col, Container, Form, FormFeedback, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { SignUp } from 'aws-amplify-react';
 import { JS } from '@aws-amplify/core';
 import NotificationAlert from 'react-notification-alert';
@@ -10,7 +10,14 @@ import Log from '../../../utils/Logger/Log';
 class DefaultSignUp extends SignUp {
   constructor(props) {
     super(props);
+    this.state = {
+      validate: {},
+      isSigningUp: false,
+    }
     this.onSignUp = this.onSignUp.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
+    this.validateEqual = this.validateEqual.bind(this);
+    this.validateMinCharacter = this.validateMinCharacter.bind(this);
   }
 
   error(err) {
@@ -35,14 +42,50 @@ class DefaultSignUp extends SignUp {
     this.notify.notificationAlert(options);
   }
 
-  onSignUp() {
-    if (this.inputs.password === this.inputs.repeatpassword) {
-      this.inputs.email = this.inputs.username;
-      this.signUp();
+  async validateMinCharacter(e, characters) {
+    const { validate } = this.state
+    if (e.target.value.length >= characters) {
+      validate[e.target.name] = 'has-success';
     } else {
-      Log.warn("Passwords do not match","DefaultAuth.SignUp");
-      this.error({message:"Passwords do not match"});
+      validate[e.target.name] = 'has-error';
     }
+    this.setState({ validate })
+  }
+
+  
+  validateEmail(e) {
+    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const { validate } = this.state
+    if (emailRex.test(e.target.value)) {
+      validate[e.target.name] = 'has-success';
+    } else {
+      validate[e.target.name] = 'has-error';
+    }
+    this.setState({ validate })
+  }
+
+  validateEqual(e, compare) {
+    const { validate } = this.state
+    if (e.target.value === compare) {
+      validate[e.target.name] = 'has-success';
+    } else {
+      validate[e.target.name] = 'has-error';
+    }
+    this.setState({ validate })
+  }
+
+  async onSignUp() {
+    if ((this.state.validate.email === 'has-success') && 
+      (this.state.validate.password === 'has-success') &&
+      (this.state.validate.repeatpassword === 'has-success')) {
+      this.inputs.username = this.inputs.email;
+      this.setState({ isSigningUp: true });
+      await this.signUp();
+      this.setState({ 
+        isSigningUp: false,
+        validate: {}
+      });
+    } 
   }
 
   render() {
@@ -51,7 +94,12 @@ class DefaultSignUp extends SignUp {
     if (authState !== 'signUp') {
       return null;
     }
-
+    
+  
+    if (this.checkCustomSignUpFields()) {
+      this.signUpFields = this.props.signUpConfig.signUpFields;
+    }
+    this.sortFields();
     return (
       <div className="app flex-row align-items-center">
         <NotificationAlert ref={(c) => { this.notify = c; }} />
@@ -72,12 +120,20 @@ class DefaultSignUp extends SignUp {
                       <Input 
                         type="text" 
                         placeholder={ t('common:Email') } 
-                        autoComplete="username"
+                        autoComplete="email"
                         autoFocus
-                        key="username"
-                        name="username"
-                        onChange={this.handleInputChange}
-                         />
+                        key="email"
+                        name="email"
+                        onChange={ (e) => {
+                          this.validateEmail(e)
+                          this.handleInputChange(e)
+                        }}
+                        valid={ this.state.validate.email === 'has-success' }
+                        invalid={ this.state.validate.email === 'has-error' }
+                        />
+                      <FormFeedback>
+                        { t('Please enter a correct email address.') }
+                      </FormFeedback>
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -91,8 +147,16 @@ class DefaultSignUp extends SignUp {
                         autoComplete="password"
                         key="password"
                         name="password"
-                        onChange={this.handleInputChange}
+                        onChange={ (e) => {
+                          this.validateMinCharacter(e,8)
+                          this.handleInputChange(e)
+                        }}
+                        valid={ this.state.validate.password === 'has-success' }
+                        invalid={ this.state.validate.password === 'has-error' }
                       />
+                      <FormFeedback>
+                        { t('Password must have at least 8 characters.') } 
+                      </FormFeedback>
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -102,19 +166,28 @@ class DefaultSignUp extends SignUp {
                       </InputGroupAddon>
                       <Input 
                         type="password" 
-                        placeholder={ t('common:RepeadPassword') }
+                        placeholder={ t('common:ConfirmPassword') }
                         autoComplete="password"
                         key="repeatpassword"
                         name="repeatpassword"
-                        onChange={this.handleInputChange}
+                        onChange={ (e) => {
+                          this.validateEqual(e,this.inputs.password)
+                        }}
+                        valid={ this.state.validate.repeatpassword === 'has-success' }
+                        invalid={ this.state.validate.repeatpassword === 'has-error' }
+                      
                       />
+                      <FormFeedback>
+                      { t('Password and confirm password does not match.') }
+                      </FormFeedback>
                     </InputGroup>
                     <Row>
                         <Col xs="6">
                           <Button color="link" className="px-0" onClick={() => this.changeState('signIn')}>{ t('Have an account? Sign in') }</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="success" className="px-4" onClick={this.onSignUp}>{ t('common:Register') }</Button>
+                          <Button color="success" className="px-4" onClick={this.onSignUp}>{ t('common:Register') }{' '} 
+                        { (this.state.isSigningUp) ? <i className="fa fa-spin fa-circle-o-notch"/>: null }</Button>
                         </Col>
                     </Row>
                   </Form>

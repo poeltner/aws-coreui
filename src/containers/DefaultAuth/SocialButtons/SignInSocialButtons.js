@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FacebookButton } from "./FacebookButton";
 import { Auth } from "aws-amplify";
 import { JS } from "@aws-amplify/core";
-import { Strike } from "aws-amplify-react";
+// import { Strike } from "aws-amplify-react";
 import { MetamaskButton } from "./MetamaskButton";
 import PropTypes from "prop-types";
 
@@ -69,7 +69,7 @@ export class SignInSocialButtons extends Component {
 
     return (
       <div>
-        <Strike>or</Strike>
+        {/* <Strike>or</Strike> */}
         <div>{/* {this.google(google_client_id)} */}</div>
         <div className="text-center">{this.facebook(facebook_app_id)}</div>
         <div>{/* {this.amazon(amazon_client_id)} */}</div>

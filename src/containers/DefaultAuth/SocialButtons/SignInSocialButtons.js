@@ -69,7 +69,9 @@ export class SignInSocialButtons extends Component {
 
     return (
       <div>
-        {/* <Strike>or</Strike> */}
+        <div>
+          <hr />
+        </div>
         <div>{/* {this.google(google_client_id)} */}</div>
         <div className="text-center">{this.facebook(facebook_app_id)}</div>
         <div>{/* {this.amazon(amazon_client_id)} */}</div>

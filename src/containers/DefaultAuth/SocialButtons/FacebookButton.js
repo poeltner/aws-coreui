@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "reactstrap";
-import withFacebook from "aws-amplify-react";
+import { withFacebook } from "aws-amplify-react";
 import { NamespacesConsumer } from "react-i18next";
 import PropTypes from "prop-types";
 

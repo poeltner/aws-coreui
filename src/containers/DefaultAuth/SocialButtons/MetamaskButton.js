@@ -20,7 +20,7 @@ export default function withMetamask(Comp) {
       const web3 = window.web3;
 
       web3.eth.getAccounts((error, accounts) => {
-        if (accounts.length == 0) {
+        if (accounts.length === 0) {
           // there is no active accounts in MetaMask
           console.log("no active accoutn");
         } else {
@@ -110,7 +110,7 @@ export default function withMetamask(Comp) {
         let web3 = new Web3(window.web3.currentProvider);
         if (web3.currentProvider.isMetaMask === true) {
           web3.eth.getAccounts((error, accounts) => {
-            if (accounts.length == 0) {
+            if (accounts.length === 0) {
               // there is no active accounts in MetaMask
               console.log("no active account");
             } else {
@@ -131,7 +131,7 @@ export default function withMetamask(Comp) {
       const web3 = window.web3;
 
       web3.eth.getAccounts((error, accounts) => {
-        if (accounts.length == 0) {
+        if (accounts.length === 0) {
           // there is no active accounts in MetaMask
           console.log("no active accoutn");
         } else {

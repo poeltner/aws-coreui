@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { ConfirmSignIn  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
 class DefaultConfirmSignIn  extends ConfirmSignIn  {
@@ -11,7 +11,7 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
   error(err) {
     const { t } = this.props;
     Log.error(err, 'DefaultAuth.CofnirmSignIn');
-    const options = {
+    const options = { 
       place: 'tl',
       message: (
           <div>
@@ -94,4 +94,4 @@ class DefaultConfirmSignIn  extends ConfirmSignIn  {
   }
 }
 
-export default withNamespaces('auth') (DefaultConfirmSignIn);
+export default withTranslation('auth') (DefaultConfirmSignIn);

@@ -16,7 +16,7 @@ import {
 import { SignIn } from "aws-amplify-react";
 import NotificationAlert from "react-notification-alert";
 import { SignInSocialButtons } from "../SocialButtons/SignInSocialButtons";
-import { withNamespaces } from "react-i18next";
+import { withTranslation } from "react-i18next";
 import Log from "../../../utils/Logger/Log";
 
 class DefaultSignIn extends SignIn {
@@ -173,4 +173,4 @@ class DefaultSignIn extends SignIn {
 }
 
 // export default DefaultSignIn;
-export default withNamespaces("auth", { wait: true })(DefaultSignIn);
+export default withTranslation("auth", { wait: true })(DefaultSignIn);

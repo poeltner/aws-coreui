@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { ConfirmSignUp  } from 'aws-amplify-react';
 import NotificationAlert from 'react-notification-alert';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
 class DefaultConfirmSignUp  extends ConfirmSignUp  {
@@ -163,4 +163,4 @@ class DefaultConfirmSignUp  extends ConfirmSignUp  {
   }
 }
 
-export default withNamespaces('auth') (DefaultConfirmSignUp);
+export default withTranslation('auth') (DefaultConfirmSignUp);

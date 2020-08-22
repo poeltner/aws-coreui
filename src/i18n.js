@@ -1,5 +1,5 @@
 import i18n from "i18next";
-import { reactI18nextModule } from "react-i18next";
+import { initReactI18next } from "react-i18next";
 import detector from "i18next-browser-languagedetector";
 import backend from "i18next-xhr-backend";
 
@@ -27,7 +27,7 @@ var detectionOptions = {
 i18n
   .use(detector)
   .use(backend)
-  .use(reactI18nextModule) // passes i18n down to react-i18next
+  .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     // lng: "en",
     detection: detectionOptions,
@@ -49,7 +49,8 @@ i18n
 
     // react-i18next options
     react: {
-      wait: true
+      wait: true,
+      useSuspense: false
     }
   });
 

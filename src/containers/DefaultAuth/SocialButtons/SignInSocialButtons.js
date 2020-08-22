@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FacebookButton } from './FacebookButton';
 import { Auth } from 'aws-amplify';
 import { JS } from '@aws-amplify/core';
-import { Strike } from 'aws-amplify-react/dist/Amplify-UI/Amplify-UI-Components-React';
+// import { Strike } from 'aws-amplify-react/dist/Amplify-UI/Amplify-UI-Components-React';
 import PropTypes from 'prop-types';
 
 export class SignInSocialButtons extends Component {
@@ -46,7 +46,7 @@ export class SignInSocialButtons extends Component {
 
         return (
             <div>
-                <Strike >or</Strike>
+                {/* <Strike >or</Strike> */}
                 <div>
                 {/* {this.google(google_client_id)} */}
                 </div>

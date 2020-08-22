@@ -4,7 +4,7 @@ import { SignUp } from 'aws-amplify-react';
 import { JS } from '@aws-amplify/core';
 import NotificationAlert from 'react-notification-alert';
 import { SignUpSocialButtons } from '../SocialButtons/SignUpSocialButtons';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Log from '../../../utils/Logger/Log';
 
 class DefaultSignUp extends SignUp {
@@ -212,4 +212,4 @@ class DefaultSignUp extends SignUp {
   }
 }
 
-export default withNamespaces('auth') (DefaultSignUp);
+export default withTranslation('auth') (DefaultSignUp);

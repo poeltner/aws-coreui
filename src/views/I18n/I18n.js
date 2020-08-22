@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Button } from 'reactstrap';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 
 class I18n extends Component {
@@ -35,4 +35,4 @@ class I18n extends Component {
   }
 }
 
-export default withNamespaces('view_i18n') (I18n);
+export default withTranslation('view_i18n') (I18n);

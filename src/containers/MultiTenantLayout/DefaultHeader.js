@@ -5,7 +5,7 @@ import { Auth } from 'aws-amplify';
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import DefaultLanguageSwitcher from './DefaultLanguageSwitcher';
 
 const propTypes = {
@@ -99,4 +99,4 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-export default withNamespaces('layout')(DefaultHeader);
+export default withTranslation('layout')(DefaultHeader);
